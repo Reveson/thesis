@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import siemieniuk.thesis.feedservice.dto.NewFeedRequest;
+import siemieniuk.thesis.feedservice.model.Comment;
 import siemieniuk.thesis.feedservice.model.FeedAuthor;
 import siemieniuk.thesis.feedservice.model.FeedSubscriber;
 import siemieniuk.thesis.feedservice.repository.FeedSubscriberRepository;
@@ -39,7 +40,6 @@ public class FeedController {
 		return ResponseEntity.ok(feedService.getFeedsByAuthor(authorId));
 	}
 
-	//TODO pagination
 	@PostMapping("/new")
 	public ResponseEntity<FeedAuthor> publishFeed(@RequestBody NewFeedRequest request) {
 		return ResponseEntity.ok(feedService.publishFeed(request));
