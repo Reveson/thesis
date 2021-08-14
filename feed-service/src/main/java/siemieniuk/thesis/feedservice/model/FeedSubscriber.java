@@ -17,13 +17,13 @@ import lombok.Data;
 public class FeedSubscriber {
 
 	@PrimaryKeyColumn(name = "subscriber_id", ordinal = 0, type = PARTITIONED)
-	long subscriberId;
+	private long subscriberId;
 	@PrimaryKeyColumn(name = "timestamp", ordinal = 1, type = CLUSTERED, ordering = DESCENDING)
-	UUID timestamp;
+	private UUID timestamp;
 	@Column("author_id")
-	long authorId;
+	private long authorId;
 	@Column("author_name")
-	String authorName;
-	String content;
-	String photo;
+	private String authorName;
+	private String content;
+	private String photo;
 }

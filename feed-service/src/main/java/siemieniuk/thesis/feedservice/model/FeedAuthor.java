@@ -16,9 +16,9 @@ import lombok.Data;
 public class FeedAuthor {
 
 	@PrimaryKeyColumn(name = "author_id", ordinal = 0, type = PARTITIONED)
-	long authorId;
+	private long authorId;
 	@PrimaryKeyColumn(name = "timestamp", ordinal = 1, type = CLUSTERED, ordering = DESCENDING)
-	UUID timestamp;
-	String content;
-	String photo;
+	private UUID timestamp;
+	private String content;
+	private String photo;
 }
