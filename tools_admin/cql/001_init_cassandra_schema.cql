@@ -51,17 +51,12 @@ CREATE TABLE notification
 
 CREATE TABLE message
 (
-    channel_id   bigint,
+    user_id   bigint,
+    second_user_id bigint,
     timestamp timeuuid,
-    author_id   bigint,
+    author_id bigint,
     content   text,
-    PRIMARY KEY ((channel_id), timestamp)
+    PRIMARY KEY ((user_id, second_user_id), timestamp)
 ) WITH CLUSTERING ORDER BY (timestamp desc);
 
-CREATE TABLE channel
-(
-    user_id   bigint,
-    channel_id bigint,
-    channel_name   text,
-    PRIMARY KEY (user_id)
-);
+CREATE INDEX message_user_id on message(user_id);
