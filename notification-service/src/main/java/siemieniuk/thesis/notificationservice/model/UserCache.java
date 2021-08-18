@@ -1,0 +1,19 @@
+package siemieniuk.thesis.notificationservice.model;
+
+import static siemieniuk.thesis.notificationservice.model.UserCache.KEY;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
+
+import lombok.Data;
+
+@RedisHash(KEY)
+@Data
+public class UserCache {
+	public static final String KEY = "userCache";
+	public static final String UNREAD_NOTIFICATIONS = "unreadNotifications";
+
+	@Id
+	private long id;
+	private long unreadNotifications;
+}

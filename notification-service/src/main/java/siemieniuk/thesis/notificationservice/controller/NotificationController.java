@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import siemieniuk.thesis.notificationservice.dto.NewNotificationRequest;
 import siemieniuk.thesis.notificationservice.model.Notification;
 import siemieniuk.thesis.notificationservice.service.NotificationService;
+import siemieniuk.thesis.notificationservice.service.UserCacheService;
 
 @RestController
 @RequestMapping("/notification")
@@ -21,6 +22,7 @@ import siemieniuk.thesis.notificationservice.service.NotificationService;
 public class NotificationController {
 
 	private final NotificationService notificationService;
+	private final UserCacheService userCacheService;
 
 	//TODO pagination
 	@GetMapping("/{userId}")
@@ -28,11 +30,14 @@ public class NotificationController {
 			@PathVariable("userId") long userId) {
 		var notifications = notificationService.getNotifications(userId);
 		notificationService.markAsRead(notifications);
+		userCacheService.setNotificationsById(userId, 0);
 		return ResponseEntity.ok(notifications);
 	}
 
 	@PostMapping("/new")
 	public ResponseEntity<Notification> createNotification(@RequestBody NewNotificationRequest request) {
-		return ResponseEntity.ok(notificationService.createNotification(request));
+		var notification = notificationService.createNotification(request);
+		userCacheService.incrementNotificationsById(request.getUserId(), 1);
+		return ResponseEntity.ok(notification);
 	}
 }
