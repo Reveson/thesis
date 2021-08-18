@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.AllArgsConstructor;
 import siemieniuk.thesis.messageservice.dto.NewMessageRequest;
 import siemieniuk.thesis.messageservice.model.Message;
-import siemieniuk.thesis.messageservice.repository.MessageRepository;
+import siemieniuk.thesis.messageservice.service.UserCacheService;
 import siemieniuk.thesis.messageservice.service.MessageService;
 
 @RestController
@@ -22,13 +22,17 @@ import siemieniuk.thesis.messageservice.service.MessageService;
 public class MessageController {
 
 	private final MessageService messageService;
+	private final UserCacheService userCacheService;
+
 
 	//TODO pagination
 	@GetMapping("/get/{recipientId}")
 	public ResponseEntity<List<Message>> getMessages(
 			@PathVariable("userId") long userId,
 			@PathVariable("recipientId") long recipientId) {
-		return ResponseEntity.ok(messageService.getMessages(userId, recipientId));
+		var messages = messageService.getMessages(userId, recipientId);
+		userCacheService.setMessagesById(userId, 0);
+		return ResponseEntity.ok(messages);
 	}
 
 	//TODO pagination
@@ -41,6 +45,8 @@ public class MessageController {
 	public ResponseEntity<Message> sendMessage(
 			@PathVariable("userId") long userId,
 			@RequestBody NewMessageRequest request) {
-		return ResponseEntity.ok(messageService.sendMessage(userId, request));
+		var message = messageService.sendMessage(userId, request);
+		userCacheService.incrementMessagesById(request.getRecipientId(), 1);
+		return ResponseEntity.ok(message);
 	}
 }
