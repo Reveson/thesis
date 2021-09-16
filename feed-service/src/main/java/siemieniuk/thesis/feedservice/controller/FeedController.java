@@ -1,6 +1,7 @@
 package siemieniuk.thesis.feedservice.controller;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,7 +40,10 @@ public class FeedController {
 	@GetMapping("/author/{authorId}")
 	public ResponseEntity<List<FeedAuthor>> getFeedsByAuthor(
 			@PathVariable("authorId") long authorId) {
-		return ResponseEntity.ok(feedService.getFeedsByAuthor(authorId));
+		//TODO should be as pagination from frontend
+		long now = System.currentTimeMillis();
+		long defaultTimeFrom = now - TimeUnit.DAYS.toMillis(30);
+		return ResponseEntity.ok(feedService.getFeedsByAuthor(authorId, defaultTimeFrom, now));
 	}
 
 	@PostMapping("/new")
@@ -77,6 +81,14 @@ public class FeedController {
 	public ResponseEntity<?> unfollow(
 			@RequestBody FollowRequest request) {
 		subscriptionService.unfollowUser(request);
+		return ResponseEntity.noContent().build();
+	}
+
+	//TODO shouldn't be visible in public API
+	@PostMapping("/subscriber/{subscriberId}/denormalizeFeeds")
+	public ResponseEntity<?> denormalizeFeeds(
+			@PathVariable("subscriberId") long subscriberId) {
+		feedService.denormalizeFeedsForUser(subscriberId, true);
 		return ResponseEntity.noContent().build();
 	}
 }

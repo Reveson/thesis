@@ -4,6 +4,8 @@ import static siemieniuk.thesis.feedservice.util.RedisKeyMapper.asRedisKey;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -17,11 +19,21 @@ public class SubscriptionService {
 	private final RedisTemplate<String, String> redisTemplate;
 	private static final String FOLLOWED_USERS = "followedUsers";
 	private static final String USER_FOLLOWERS = "userFollowers";
+	private static final String ONLINE_USERS = "onlineUsers";
 
 
 	public List<Long> getActiveSubscribersList(long userId) {
-		//TODO integrate with Redis
-		return Collections.emptyList();
+		String onlineFollowers = asRedisKey(ONLINE_USERS, userId);
+		//TODO can be done in one operation, but no interface in dependency...
+		redisTemplate.opsForZSet().intersectAndStore(ONLINE_USERS, USER_FOLLOWERS, onlineFollowers);
+		Set<String> onlineFollowersIds = redisTemplate.opsForZSet().rangeByScore(onlineFollowers, 0, -1);
+
+		if (onlineFollowersIds == null) {
+			//TODO null log
+			onlineFollowersIds = Collections.emptySet();
+		}
+
+		return onlineFollowersIds.stream().map(Long::parseLong).collect(Collectors.toList());
 	}
 
 	public long getNumberOfFollowers(long userId) {
@@ -36,6 +48,16 @@ public class SubscriptionService {
 		Long followed = redisTemplate.opsForSet().size(key);
 		//TODO null handle
 		return followed == null ? 0 : followed;
+	}
+
+	public List<Long> getUsersFollowedBy(long userId) {
+		String key = asRedisKey(FOLLOWED_USERS, userId);
+		//TODO null handle
+		Set<String> usersFollowed = redisTemplate.opsForSet().members(key);
+		if (usersFollowed == null)
+			return Collections.emptyList();
+
+		return usersFollowed.stream().map(Long::parseLong).collect(Collectors.toList());
 	}
 
 	public boolean isFollowed(long userId, long followedId) {

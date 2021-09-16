@@ -1,12 +1,12 @@
 package siemieniuk.thesis.feedservice.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.cassandra.repository.CassandraRepository;
 
 import siemieniuk.thesis.feedservice.model.FeedAuthor;
-import siemieniuk.thesis.feedservice.model.FeedSubscriber;
 
 public interface FeedAuthorRepository extends CassandraRepository<FeedAuthor, Long> {
-	List<FeedAuthor> findAllByAuthorId(long authorId); //TODO limit
+	List<FeedAuthor> findAllByAuthorIdAndTimestampBetween(long authorId, UUID timeFrom, UUID timeTo);
 }
