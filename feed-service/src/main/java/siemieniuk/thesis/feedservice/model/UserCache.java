@@ -15,7 +15,7 @@ public class UserCache {
 	public static final String SYNC_TAIL = "syncTail";
 
 	@Id
-	private long id;
-	private long syncHead;
-	private long syncTail;
+	private Long id;
+	private Long syncHead;
+	private Long syncTail;
 }

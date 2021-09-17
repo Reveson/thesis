@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import siemieniuk.thesis.userservice.dto.ChangeInfoRequest;
 import siemieniuk.thesis.userservice.dto.NewUserRequest;
 import siemieniuk.thesis.userservice.model.User;
+import siemieniuk.thesis.userservice.service.UserActivityService;
 import siemieniuk.thesis.userservice.service.UserService;
 
 @RestController
@@ -23,6 +24,7 @@ import siemieniuk.thesis.userservice.service.UserService;
 public class UserController {
 
 	private final UserService userService;
+	private final UserActivityService userActivityService;
 
 	@GetMapping("/{userId}")
 	public ResponseEntity<User> getUser(@PathVariable("userId") long userId) {
@@ -43,5 +45,13 @@ public class UserController {
 
 		return ResponseEntity.status(CREATED).
 				body(userService.createNew(request.getLogin(), request.getPassword()));
+	}
+
+	//TODO not to be visible in public API
+	@PostMapping("{userId}/keepAlive")
+	public ResponseEntity<?> setUserActive(@PathVariable("userId") long userId) {
+		userActivityService.setUserActive(userId);
+
+		return ResponseEntity.noContent().build();
 	}
 }

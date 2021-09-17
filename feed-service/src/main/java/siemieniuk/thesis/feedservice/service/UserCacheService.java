@@ -14,7 +14,8 @@ public class UserCacheService {
 	private final UserCacheRepository userCacheRepository;
 
 	public Optional<UserCache> findById(long userId) {
-		return userCacheRepository.findById(String.valueOf(userId));
+		Optional<UserCache> optionalUserCache = userCacheRepository.findById(String.valueOf(userId));
+		return optionalUserCache.isEmpty() || optionalUserCache.get().getId() == null ? Optional.empty() : optionalUserCache;
 	}
 
 	public void save(UserCache userCache) {
