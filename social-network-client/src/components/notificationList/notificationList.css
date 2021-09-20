@@ -1,0 +1,16 @@
+.notificationList {
+  position: absolute;
+  background-color: #1f2b36;
+  border: var(--text-color);
+  transform: translateX(-45%);
+  width: 300px;
+  top: 30px;
+  overflow: hidden;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.notificationItem:hover {
+  background-color: darkorange;
+  border-radius: 5px;
+}

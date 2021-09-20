@@ -1,0 +1,13 @@
+.conversation {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  color: var(--color-background);
+  cursor: pointer;
+}
+
+.conversation:hover {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  border-radius: 10px;
+}

@@ -1,0 +1,51 @@
+.profile {
+  width: 50%;
+  margin: 30px auto;
+  padding: 15px;
+  box-shadow: 0 0 15px -7px var(--color-background);
+}
+
+.profileTop {
+  justify-content: space-around;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.profilePhotoAndUsername {
+  display: flex;
+  align-items: center;
+}
+
+.profilePhoto {
+  transform: scale(2);
+  margin-right: 10px;
+}
+
+.profileUsername {
+  font-size: 30px;
+}
+
+.profileLogin {
+  color: grey;
+  font-weight: lighter;
+}
+
+.profileInfoKey {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.profileBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.profileButtonFollow {
+  transform: scale(0.8);
+}
+
+.profileButtonChat {
+  transform: scale(0.8);
+}

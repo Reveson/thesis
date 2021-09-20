@@ -1,0 +1,20 @@
+.userListElement {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 200px;
+}
+
+.usernameWithPhoto {
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+.usernameWithPhoto:hover {
+  color: var(--text-color);
+}
+
+.username {
+  font-weight: bold;
+}
+

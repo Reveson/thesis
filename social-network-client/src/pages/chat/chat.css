@@ -1,0 +1,49 @@
+.chat {
+  height: calc(100vh - 70px);
+  display: flex;
+  width: 75%;
+  margin: 10px auto;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+}
+
+.chatConversations {
+  flex: 2;
+  border-right: 1px solid lightgray;
+  border-radius: 5px;
+  overflow-y: scroll;
+}
+
+.chatBox {
+  flex: 5;
+}
+
+.chatConversationsWrapper {
+  padding: 10px;
+}
+
+.chatBoxBottom {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chatMessageInput {
+  width: 80%;
+  height: 70px;
+  resize: none;
+}
+
+.chatBoxWrapper {
+  height: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.chatBoxTop {
+  overflow-y: scroll;
+  padding-right: 10px;
+}

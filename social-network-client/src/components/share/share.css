@@ -1,0 +1,26 @@
+.share {
+  width: 50%;
+  border-radius: 10px;
+  box-shadow: 0 0 15px -7px var(--color-background);
+  margin: 30px auto 45px;
+}
+
+.shareWrapper {
+  padding: 10px 10px 20px;
+
+}
+
+.shareInput {
+  border: none;
+  width: 100%;
+}
+
+.shareInput:focus {
+  outline: none;
+}
+
+.shareBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

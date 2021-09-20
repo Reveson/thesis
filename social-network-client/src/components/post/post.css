@@ -1,0 +1,42 @@
+.post {
+  width: 50%;
+  border-radius: 10px;
+  box-shadow: 0 0 15px -7px var(--color-background);
+  margin: 25px auto;
+  color: var(--color-background);
+}
+
+.postWrapper {
+  padding: 10px;
+}
+
+.postTop {
+  display: flex;
+  align-items: center;
+}
+
+.postUsername {
+  font-size: 15px;
+  font-weight: bold;
+  margin: 0 10px;
+}
+
+.postDate {
+  font-size: 13px;
+  margin: 0 10px;
+  color: grey;
+}
+
+.postCenter {
+  margin: 25px 0;
+}
+
+.postBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.postLikes, .postComments {
+  cursor: pointer;
+}
