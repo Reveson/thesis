@@ -1,7 +1,5 @@
 package siemieniuk.thesis.userservice.controller;
 
-import static org.springframework.http.HttpStatus.CREATED;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import siemieniuk.thesis.userservice.dto.ChangeInfoRequest;
-import siemieniuk.thesis.userservice.dto.NewUserRequest;
 import siemieniuk.thesis.userservice.model.User;
 import siemieniuk.thesis.userservice.service.UserActivityService;
 import siemieniuk.thesis.userservice.service.UserService;
@@ -37,14 +34,6 @@ public class UserController {
 			@RequestBody ChangeInfoRequest request) {
 
 		return ResponseEntity.ok(userService.changeInfo(userId, request));
-	}
-
-	@PostMapping("/new")
-	public ResponseEntity<User> addNewUser(@RequestBody NewUserRequest request) {
-		//TODO passwords match check
-
-		return ResponseEntity.status(CREATED).
-				body(userService.createNew(request.getLogin(), request.getPassword()));
 	}
 
 	//TODO not to be visible in public API

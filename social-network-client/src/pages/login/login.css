@@ -1,0 +1,29 @@
+.login {
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  background-color: #e4e4e4;
+
+}
+
+.loginBoxWrapper {
+  width: 300px;
+  height: 400px;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  box-shadow: 0 0 15px -7px var(--color-background);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 20px 10px;
+  background-color: white;
+}
+
+.loginInput, .passwordInput, .submitButton, .registerButton {
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid gray;
+  outline: none;
+}

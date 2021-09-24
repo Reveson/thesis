@@ -9,6 +9,8 @@ import Chat from './pages/chat/Chat';
 import Profile from './pages/profile/Profile';
 import { createGlobalStyle } from 'styled-components';
 import { COLORS } from './Constants';
+import Login from './pages/login/Login';
+import axios from 'axios';
 
 const GlobalStyles = createGlobalStyle`
   html {
@@ -32,6 +34,9 @@ function App() {
           </Route>
           <Route path="/user">
             <Profile/>
+          </Route>
+          <Route path="/login">
+            <Login/>
           </Route>
         </Switch>
       </Router>
