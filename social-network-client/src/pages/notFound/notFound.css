@@ -1,0 +1,41 @@
+.notFound {
+  background: var(--color-background);
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.notFoundWrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.top404 {
+  color: var(--color-text);
+  text-align: center;
+  font-size: 150px;
+  font-weight: bold;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+
+.topNotFound {
+  font-size: 45px;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-align: center;
+  color: var(--color-text);
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  margin-top: -50px;
+  margin-bottom: 20px;
+}
+
+.bottomText {
+  text-align: center;
+  color: var(--color-text);
+  font-size: 20px;
+  margin-top: 100px;
+  margin-bottom: 20px;
+}

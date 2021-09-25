@@ -1,13 +1,17 @@
 import './topbar.css';
-import { Chat, Notifications, Person, Search } from '@mui/icons-material';
+import { Chat, Person, Search } from '@mui/icons-material';
 import TopbarDropdownItem from '../topbarDropdownItem/TopbarDropdownItem';
 import NotificationList from '../notificationList/NotificationList';
 import UserListDialog from '../userListDialog/UserListDialog';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { STORAGE } from '../../Constants';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Topbar() {
   const [usersDialogOpen, setUsersDialogOpen] = useState(false);
+  const userLogin = localStorage.getItem(STORAGE.userLogin);
 
   const handleClickOpenUsers = () => {
     setUsersDialogOpen(true);
@@ -47,12 +51,16 @@ export default function Topbar() {
               <span className="topbarIconBadge">1</span>
             </div>
           </div>
+          <span>
+            {userLogin ? 'Hello, ' + userLogin : ''}
+          </span>
         </div>
       </div>
       <UserListDialog
         open={usersDialogOpen}
         onClose={handleCloseUsers}
       />
+      <ToastContainer/>
     </>
   );
 }

@@ -13,7 +13,9 @@ export default function Login() {
   const handleLogin = () => {
     login({login: loginInput, password: passInput})
     .then(resp => {
-      localStorage.setItem(STORAGE.token, resp.access_token);
+      localStorage.setItem(STORAGE.token, resp.data.accessToken);
+      localStorage.setItem(STORAGE.userId, resp.data.user.id);
+      localStorage.setItem(STORAGE.userLogin, resp.data.user.login);
       history.push('/');
     })
     .catch(error => {

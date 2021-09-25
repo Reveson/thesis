@@ -1,5 +1,5 @@
 import './share.css';
-import { Add, AddPhotoAlternate, Send } from '@mui/icons-material';
+import { AddPhotoAlternate, Send } from '@mui/icons-material';
 import { Button, TextareaAutosize } from '@mui/material';
 
 export default function Share() {

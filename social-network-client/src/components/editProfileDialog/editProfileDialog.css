@@ -1,0 +1,17 @@
+.key {
+  display: inline-block;
+  width: 80px;
+  text-align: right;
+  font-weight: bold;
+  padding-right: 5px;
+}
+
+.editGroup {
+  margin-bottom: 10px;
+}
+
+.saveWrapper {
+  padding-top: 10px;
+  display: flex;
+  justify-content: right;
+}

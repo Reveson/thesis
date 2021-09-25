@@ -10,5 +10,7 @@ export const URLS = {
 };
 
 export const STORAGE = {
-  token: 'token'
+  token: 'token',
+  userId: 'userId',
+  userLogin: 'userLogin'
 }

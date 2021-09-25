@@ -1,16 +1,12 @@
 import './app.css';
 import Home from './pages/home/Home';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Chat from './pages/chat/Chat';
 import Profile from './pages/profile/Profile';
 import { createGlobalStyle } from 'styled-components';
 import { COLORS } from './Constants';
 import Login from './pages/login/Login';
-import axios from 'axios';
+import NotFound from './pages/notFound/NotFound';
 
 const GlobalStyles = createGlobalStyle`
   html {
@@ -32,11 +28,17 @@ function App() {
           <Route path="/chat">
             <Chat/>
           </Route>
-          <Route path="/user">
+          <Route path="/user/:id">
             <Profile/>
           </Route>
           <Route path="/login">
             <Login/>
+          </Route>
+          <Route path="/notFound">
+            <NotFound/>
+          </Route>
+          <Route path="*">
+            <Redirect to="/notFound" />
           </Route>
         </Switch>
       </Router>

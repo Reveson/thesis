@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import siemieniuk.thesis.userservice.dto.ChangeInfoRequest;
-import siemieniuk.thesis.userservice.model.User;
+import siemieniuk.thesis.userservice.dto.UserResponse;
 import siemieniuk.thesis.userservice.service.UserActivityService;
 import siemieniuk.thesis.userservice.service.UserService;
 
@@ -24,16 +24,16 @@ public class UserController {
 	private final UserActivityService userActivityService;
 
 	@GetMapping("/{userId}")
-	public ResponseEntity<User> getUser(@PathVariable("userId") long userId) {
-		return ResponseEntity.ok(userService.findById(userId));
+	public ResponseEntity<UserResponse> getUser(@PathVariable("userId") long userId) {
+		return ResponseEntity.ok(UserResponse.fromUser(userService.findById(userId)));
 	}
 
-	@PutMapping("{userId}")
-	public ResponseEntity<User> changeInfo(
+	@PutMapping("/{userId}")
+	public ResponseEntity<UserResponse> changeInfo(
 			@PathVariable("userId") long userId,
 			@RequestBody ChangeInfoRequest request) {
 
-		return ResponseEntity.ok(userService.changeInfo(userId, request));
+		return ResponseEntity.ok(UserResponse.fromUser(userService.changeInfo(userId, request)));
 	}
 
 	//TODO not to be visible in public API

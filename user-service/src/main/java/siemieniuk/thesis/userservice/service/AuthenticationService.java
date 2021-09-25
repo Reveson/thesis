@@ -3,15 +3,17 @@ package siemieniuk.thesis.userservice.service;
 import javax.transaction.Transactional;
 
 import org.springframework.core.env.Environment;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import lombok.RequiredArgsConstructor;
 import siemieniuk.thesis.userservice.dto.LoginRequest;
+import siemieniuk.thesis.userservice.dto.LoginResponse;
+import siemieniuk.thesis.userservice.dto.UserResponse;
 import siemieniuk.thesis.userservice.exception.EntityAlreadyExistsException;
-import siemieniuk.thesis.userservice.exception.NotFoundException;
 import siemieniuk.thesis.userservice.model.User;
 import siemieniuk.thesis.userservice.repository.UserRepository;
 import siemieniuk.thesis.userservice.service.client.KeycloakFeignClient;
@@ -24,26 +26,27 @@ public class AuthenticationService {
 	private final KeycloakFeignClient keycloakFeignClient;
 	private final Environment environment;
 
-	public String loginAndGetJwtToken(LoginRequest request) {
-		return keycloakFeignClient.getToken(mapLoginRequestToKeycloakBody(request)).getBody();
+	public LoginResponse loginAndGetJwtToken(LoginRequest request) {
+		ResponseEntity<String> keycloakLoginResponse = keycloakFeignClient.getToken(mapLoginRequestToKeycloakBody(request));
+		if (keycloakLoginResponse.getStatusCode() != HttpStatus.OK)
+			throw new RuntimeException(keycloakLoginResponse.getBody()); //TODO concrete exception
+
+		var user = userRepository.getByLogin(request.getLogin()).orElseGet(() -> createNew(request.getLogin()));
+		LoginResponse response = LoginResponse.fromJson(keycloakLoginResponse.getBody());
+		response.setUser(UserResponse.fromUser(user));
+
+		return response;
 	}
 
-	public User createNew(LoginRequest request) {
-		String login = request.getLogin();
+	public User createNew(String login) {
 		if (userRepository.existsByLogin(login))
 			throw new EntityAlreadyExistsException(String.format("User with name %s already exists.", login));
 
 		User user = new User();
 		user.setLogin(login);
-		user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
 		user.setPrivileges(2); //TODO hardcode
 
-		return userRepository.save(user); //TODO race condition handling
-	}
-
-	private void validatePassword(String provided, String encrypted) {
-		if (!BCrypt.checkpw(provided, encrypted))
-			throw new NotFoundException("Username or password is not correct.");
+		return userRepository.save(user);
 	}
 
 	private MultiValueMap<String, String> mapLoginRequestToKeycloakBody(LoginRequest loginRequest) {
