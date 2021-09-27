@@ -1,6 +1,7 @@
 package siemieniuk.thesis.messageservice.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
+import siemieniuk.thesis.messageservice.dto.MessageResponse;
 import siemieniuk.thesis.messageservice.dto.NewMessageRequest;
-import siemieniuk.thesis.messageservice.model.Message;
-import siemieniuk.thesis.messageservice.service.UserCacheService;
 import siemieniuk.thesis.messageservice.service.MessageService;
+import siemieniuk.thesis.messageservice.service.UserCacheService;
 
 @RestController
 @RequestMapping("/message/{userId}")
@@ -27,12 +28,13 @@ public class MessageController {
 
 	//TODO pagination
 	@GetMapping("/get/{recipientId}")
-	public ResponseEntity<List<Message>> getMessages(
+	public ResponseEntity<List<MessageResponse>> getMessages(
 			@PathVariable("userId") long userId,
 			@PathVariable("recipientId") long recipientId) {
 		var messages = messageService.getMessages(userId, recipientId);
 		userCacheService.setMessagesById(userId, 0);
-		return ResponseEntity.ok(messages);
+		return ResponseEntity.ok(messages.stream()
+				.map(MessageResponse::fromMessage).collect(Collectors.toList()));
 	}
 
 	//TODO pagination
@@ -42,11 +44,11 @@ public class MessageController {
 	}
 
 	@PostMapping("/new")
-	public ResponseEntity<Message> sendMessage(
+	public ResponseEntity<MessageResponse> sendMessage(
 			@PathVariable("userId") long userId,
 			@RequestBody NewMessageRequest request) {
 		var message = messageService.sendMessage(userId, request);
 		userCacheService.incrementMessagesById(request.getRecipientId(), 1);
-		return ResponseEntity.ok(message);
+		return ResponseEntity.ok(MessageResponse.fromMessage(message));
 	}
 }

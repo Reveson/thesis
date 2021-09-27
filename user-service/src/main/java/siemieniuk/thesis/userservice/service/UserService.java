@@ -1,5 +1,7 @@
 package siemieniuk.thesis.userservice.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,10 @@ public class UserService {
 	public User findById(long id) {
 		return userRepository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not find user with id " + id));
+	}
+
+	public List<User> findByIds(List<Long> ids) {
+		return userRepository.findAllByIds(ids);
 	}
 
 	public void changePassword(String newPassword) {

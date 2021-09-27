@@ -4,6 +4,7 @@
   padding: 10px;
   color: var(--color-background);
   cursor: pointer;
+  height: 50px;
 }
 
 .conversation:hover {
