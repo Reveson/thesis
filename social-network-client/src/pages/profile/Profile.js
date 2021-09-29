@@ -1,9 +1,9 @@
 import './profile.css';
 import Topbar from '../../components/topbar/Topbar';
-import { Add, Chat, Edit, Person } from '@mui/icons-material';
+import { Add, Chat, Edit, Person, Remove } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import Post from '../../components/post/Post';
-import { getUserById } from '../../Api';
+import { followUser, getNumberOfFollowers, getNumberOfUsersFollowed, getUserById, isUserFollowed, unfollowUser } from '../../Api';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { STORAGE } from '../../Constants';
@@ -13,10 +13,19 @@ export default function Profile() {
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [editProfileDialogOpen, setEditProfileDialogOpen] = useState(false);
+  const [followedUsers, setFollowedUsers] = useState(0);
+  const [followingUsers, setFollowingUsers] = useState(0);
+  const [isFollowed, setIsFollowed] = useState(null);
+  const loggedUserId = localStorage.getItem(STORAGE.userId);
 
   useEffect(() => {
     getUserById(id).then(resp => setUser(resp.data))
-    .catch(err => window.location = '/notFound')
+    .catch(err => window.location = '/notFound');
+
+    getNumberOfFollowers(id).then(resp => setFollowingUsers(resp.data));
+    getNumberOfUsersFollowed(id).then(resp => setFollowedUsers(resp.data));
+    isUserFollowed(localStorage.getItem(STORAGE.userId), id).then(resp => setIsFollowed(resp.data));
+
   }, []);
 
   function userProp(prop) {
@@ -35,8 +44,18 @@ export default function Profile() {
     if (!userProp('name'))
       return userProp('surname');
     if (!userProp('surname'))
-      return userProp('name')
+      return userProp('name');
     return userProp('name') + ' ' + userProp('surname');
+  }
+
+  function onFollowClick() {
+    const changeFollow =
+    isFollowed ? unfollowUser : followUser;
+
+    changeFollow().then(() => {
+      setFollowingUsers(followingUsers + (isFollowed ? -1 : 1));
+      setIsFollowed(!isFollowed);
+    })
   }
 
   return (
@@ -71,22 +90,33 @@ export default function Profile() {
         <div className="profileBottom">
           <div className="profileInfoItem">
             <span className="profileInfoKey">Users following:</span>
-            <span className="profileInfoValue">16</span>
+            <span className="profileInfoValue">{followingUsers}</span>
           </div>
           <div className="profileInfoItem">
             <span className="profileInfoKey">Users followed:</span>
-            <span className="profileInfoValue">34</span>
+            <span className="profileInfoValue">{followedUsers}</span>
           </div>
-          {localStorage.getItem(STORAGE.userId) != id && (<>
-          <Button variant="contained" startIcon={<Add/>} className="profileButtonFollow">Follow</Button>
-          <Button variant="contained" startIcon={<Chat/>} className="profileButtonChat">Text</Button>
-          </>)}
-          {localStorage.getItem(STORAGE.userId) == id && (<>
+          <Button variant="contained"
+                  startIcon={isFollowed ? <Remove/> : <Add/>}
+                  disabled={isFollowed === null}
+                  sx={{ display: (loggedUserId != id ? '' : 'none') }}
+                  onClick={onFollowClick}
+                  className="profileButtonFollow">
+            {isFollowed ? 'Unfollow' : 'Follow'}
+          </Button>
+          <Button variant="contained"
+                  startIcon={<Chat/>}
+                  sx={{ display: (loggedUserId != id ? '' : 'none') }}
+                  className="profileButtonChat">
+            Text
+          </Button>
           <Button variant="contained"
                   startIcon={<Edit/>}
                   onClick={() => setEditProfileDialogOpen(true)}
-                  className="profileButtonEdit">Edit profile</Button>
-          </>)}
+                  sx={{ display: (loggedUserId == id ? '' : 'none') }}
+                  className="profileButtonEdit">
+            Edit profile
+          </Button>
         </div>
       </div>
       <Post/>

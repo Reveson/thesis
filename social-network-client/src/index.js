@@ -21,8 +21,6 @@ axios.interceptors.response.use(undefined, error => {
 
   toast.error("Got error with " + status + " code."); //TODO development only
 
-  if (status === 404)
-    window.location = "/notFound";
 });
 
 ReactDOM.render(

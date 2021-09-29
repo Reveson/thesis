@@ -67,6 +67,7 @@ public class SubscriptionService {
 		return isFollowed != null && isFollowed;
 	}
 
+	//TODO not working
 	public void followUser(FollowRequest request) {
 		String followedUsersKey = asRedisKey(FOLLOWED_USERS, request.getUserId());
 		String userFollowersKey = asRedisKey(USER_FOLLOWERS, request.getFollowedId());

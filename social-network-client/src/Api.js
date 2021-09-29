@@ -33,3 +33,24 @@ export function getMessages(userId, recipientId) {
 export function sendMessage(userId, newMessageRequest) {
   return axios.post('message-service/message/' + userId + '/new', newMessageRequest);
 }
+
+//feed service
+export function getNumberOfFollowers(userId) {
+  return axios.get('feed-service/feed/followers/' + userId);
+}
+
+export function getNumberOfUsersFollowed(userId) {
+  return axios.get('feed-service/feed/followed/' + userId);
+}
+
+export function isUserFollowed(userFollowing, userFollowed) {
+  return axios.get('feed-service/feed/isFollowed/' + userFollowing + '?followedId=' + userFollowed);
+}
+
+export function followUser(userFollowing, userFollowed) {
+  return axios.post('feed-service/feed/follow', {userId: userFollowing, followedId: userFollowed});
+}
+
+export function unfollowUser(userFollowing, userFollowed) {
+  return axios.post('feed-service/feed/unfollow', {userId: userFollowing, followedId: userFollowed});
+}

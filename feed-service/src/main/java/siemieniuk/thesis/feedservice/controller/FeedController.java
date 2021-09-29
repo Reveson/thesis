@@ -77,7 +77,7 @@ public class FeedController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping("/follow")
+	@PostMapping("/unfollow")
 	public ResponseEntity<?> unfollow(
 			@RequestBody FollowRequest request) {
 		subscriptionService.unfollowUser(request);
