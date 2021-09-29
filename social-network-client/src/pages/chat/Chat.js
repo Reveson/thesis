@@ -4,16 +4,17 @@ import Conversation from '../../components/conversation/Conversation';
 import Message from '../../components/message/Message';
 import { Send } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useState} from 'react';
 import { getChatUserIds, getMessages, getUsersByIds, sendMessage } from '../../Api';
 import { STORAGE } from '../../Constants';
+import { useLocation } from 'react-router-dom'
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [chatUsers, setChatUsers] = useState([]);
   const [textMessage, setTextMessage] = useState('');
   const [selectedChatUser, setSelectedChatUser] = useState(null);
-
+  const initialRecipient = useLocation().recipient;
 
   useEffect(() => {
     getChatUserIds(localStorage.getItem(STORAGE.userId))
@@ -43,6 +44,8 @@ export default function Chat() {
     setTextMessage('');
   }
 
+  if (initialRecipient && !selectedChatUser)
+    selectChatUser(initialRecipient);
   return (
     <div>
       <Topbar/>

@@ -5,7 +5,7 @@ import { Button } from '@mui/material';
 import Post from '../../components/post/Post';
 import { followUser, getNumberOfFollowers, getNumberOfUsersFollowed, getUserById, isUserFollowed, unfollowUser } from '../../Api';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { STORAGE } from '../../Constants';
 import EditProfileDialog from '../../components/editProfileDialog/EditProfileDialog';
 
@@ -50,12 +50,12 @@ export default function Profile() {
 
   function onFollowClick() {
     const changeFollow =
-    isFollowed ? unfollowUser : followUser;
+      isFollowed ? unfollowUser : followUser;
 
     changeFollow().then(() => {
       setFollowingUsers(followingUsers + (isFollowed ? -1 : 1));
       setIsFollowed(!isFollowed);
-    })
+    });
   }
 
   return (
@@ -104,12 +104,14 @@ export default function Profile() {
                   className="profileButtonFollow">
             {isFollowed ? 'Unfollow' : 'Follow'}
           </Button>
-          <Button variant="contained"
-                  startIcon={<Chat/>}
-                  sx={{ display: (loggedUserId != id ? '' : 'none') }}
-                  className="profileButtonChat">
-            Text
-          </Button>
+          <Link to={{ pathname: '/chat', recipient: user}} >
+            <Button variant="contained"
+                    startIcon={<Chat/>}
+                    sx={{ display: (loggedUserId != id ? '' : 'none') }}
+                    className="profileButtonChat">
+              Text
+            </Button>
+          </Link>
           <Button variant="contained"
                   startIcon={<Edit/>}
                   onClick={() => setEditProfileDialogOpen(true)}
