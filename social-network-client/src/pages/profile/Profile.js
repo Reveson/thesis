@@ -54,7 +54,7 @@ export default function Profile() {
     const changeFollow =
       isFollowed ? unfollowUser : followUser;
 
-    changeFollow().then(() => {
+    changeFollow(loggedUserId, id).then(() => {
       setFollowingUsers(followingUsers + (isFollowed ? -1 : 1));
       setIsFollowed(!isFollowed);
     });

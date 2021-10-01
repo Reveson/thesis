@@ -43,6 +43,10 @@ export function getNumberOfUsersFollowed(userId) {
   return axios.get('feed-service/feed/followed/' + userId);
 }
 
+export function getUsersIdsFollowed(userId) {
+  return axios.get('feed-service/feed/followed/' + userId + '/list');
+}
+
 export function isUserFollowed(userFollowing, userFollowed) {
   return axios.get('feed-service/feed/isFollowed/' + userFollowing + '?followedId=' + userFollowed);
 }

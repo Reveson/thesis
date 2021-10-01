@@ -50,6 +50,16 @@ public class SubscriptionService {
 		return followed == null ? 0 : followed;
 	}
 
+	public List<Long> getUsersIdsFollowed(long userId) {
+		String key = asRedisKey(FOLLOWED_USERS, userId);
+		Set<String> followed = redisTemplate.opsForSet().members(key);
+		//TODO null handle
+		if (followed == null)
+			return Collections.emptyList();
+
+		return followed.stream().map(Long::valueOf).collect(Collectors.toList());
+	}
+
 	public List<Long> getUsersFollowedBy(long userId) {
 		String key = asRedisKey(FOLLOWED_USERS, userId);
 		//TODO null handle
@@ -67,7 +77,6 @@ public class SubscriptionService {
 		return isFollowed != null && isFollowed;
 	}
 
-	//TODO not working
 	public void followUser(FollowRequest request) {
 		String followedUsersKey = asRedisKey(FOLLOWED_USERS, request.getUserId());
 		String userFollowersKey = asRedisKey(USER_FOLLOWERS, request.getFollowedId());

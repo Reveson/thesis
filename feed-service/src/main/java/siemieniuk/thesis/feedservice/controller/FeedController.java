@@ -66,6 +66,12 @@ public class FeedController {
 		return ResponseEntity.ok(subscriptionService.getNumberOfUsersFollowed(userId));
 	}
 
+	@GetMapping("/followed/{userId}/list")
+	public ResponseEntity<List<Long>> getUsersIdsFollowed(
+			@PathVariable("userId") long userId) {
+		return ResponseEntity.ok(subscriptionService.getUsersIdsFollowed(userId));
+	}
+
 	@GetMapping("/isFollowed/{userId}")
 	public ResponseEntity<Boolean> isFollowed(
 			@PathVariable("userId") long userId,

@@ -6,12 +6,26 @@
 }
 
 .usernameWithPhoto {
+  display: flex;
+  flex: 4;
   text-decoration: none;
-  color: var(--text-color);
+  color: var(--color-background);
 }
 
 .usernameWithPhoto:hover {
-  color: var(--text-color);
+  color: var(--color-text-hover);
+  cursor: pointer;
+}
+
+.chatButton {
+  cursor: pointer;
+  display: flex;
+  flex: 1;
+  color: var(--color-background);
+}
+
+.chatButton:hover {
+  color: var(--color-text-hover);
 }
 
 .username {

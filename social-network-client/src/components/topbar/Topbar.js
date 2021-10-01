@@ -8,12 +8,24 @@ import { Link } from 'react-router-dom';
 import { STORAGE } from '../../Constants';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getUsersByIds, getUsersIdsFollowed } from '../../Api';
 
 export default function Topbar() {
   const [usersDialogOpen, setUsersDialogOpen] = useState(false);
+  const [usersFollowed, setUsersFollowed] = useState([]);
   const userLogin = localStorage.getItem(STORAGE.userLogin);
+  const userId = localStorage.getItem(STORAGE.userId);
 
   const handleClickOpenUsers = () => {
+    getUsersIdsFollowed(userId).then(resp => {
+      let userIds = resp.data;
+      setUsersFollowed(userIds.map(userId => {
+        return { id: userId }
+      }));
+      getUsersByIds({ userIds: userIds }).then(usersResp => {
+        setUsersFollowed(usersResp.data);
+      });
+    });
     setUsersDialogOpen(true);
   };
 
@@ -59,6 +71,7 @@ export default function Topbar() {
       <UserListDialog
         open={usersDialogOpen}
         onClose={handleCloseUsers}
+        users = {usersFollowed}
       />
       <ToastContainer/>
     </>
