@@ -1,11 +1,12 @@
 package siemieniuk.thesis.feedservice.controller;
 
+import static siemieniuk.thesis.feedservice.dto.FeedResponse.asFeedResponse;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,8 +19,6 @@ import lombok.AllArgsConstructor;
 import siemieniuk.thesis.feedservice.dto.FeedResponse;
 import siemieniuk.thesis.feedservice.dto.FollowRequest;
 import siemieniuk.thesis.feedservice.dto.NewFeedRequest;
-import siemieniuk.thesis.feedservice.model.FeedAuthor;
-import siemieniuk.thesis.feedservice.model.FeedSubscriber;
 import siemieniuk.thesis.feedservice.service.FeedService;
 import siemieniuk.thesis.feedservice.service.SubscriptionService;
 
@@ -51,8 +50,8 @@ public class FeedController {
 	}
 
 	@PostMapping("/new")
-	public ResponseEntity<FeedAuthor> publishFeed(@RequestBody NewFeedRequest request) {
-		return ResponseEntity.ok(feedService.publishFeed(request));
+	public ResponseEntity<FeedResponse> publishFeed(@RequestBody NewFeedRequest request) {
+		return ResponseEntity.ok(asFeedResponse(feedService.publishFeed(request)));
 	}
 
 	@GetMapping("/followers/{userId}")

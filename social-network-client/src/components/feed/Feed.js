@@ -8,6 +8,10 @@ export default function Feed() {
   const [feeds, setFeeds] = useState([]);
   const loggedUserId = localStorage.getItem(STORAGE.userId);
 
+  function addNewFeed(feed) {
+    setFeeds(feeds.concat(feed)); //TODO username
+  }
+
 
   useEffect(() => {
 
@@ -24,7 +28,7 @@ export default function Feed() {
 
   return (
     <div className='feed'>
-      <Share/>
+      <Share addNewFeed={addNewFeed}/>
       {feeds.sort((a, b) => (b.timestamp - a.timestamp) || 0)
       .map(post => (<Post key={post.timestamp} post={post} user={post.user}/>))}
     </div>

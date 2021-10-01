@@ -62,3 +62,7 @@ export function getFeedsBySubscriber(userId) {
 export function getFeedsByAuthor(userId) {
   return axios.get('feed-service/feed/author/' + userId);
 }
+
+export function createNewFeed(feedRequest) {
+  return axios.post('feed-service/feed/new', feedRequest);
+}

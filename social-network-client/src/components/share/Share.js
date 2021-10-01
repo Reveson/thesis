@@ -1,15 +1,52 @@
 import './share.css';
 import { AddPhotoAlternate, Send } from '@mui/icons-material';
-import { Button, TextareaAutosize } from '@mui/material';
+import { Button, Snackbar, TextareaAutosize } from '@mui/material';
+import { useState } from 'react';
+import { createNewFeed } from '../../Api';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { STORAGE } from '../../Constants';
 
-export default function Share() {
+export default function Share(props) {
+  const { addNewFeed } = props;
+  const [postMessage, setPostMessage] = useState('');
+  const loggedUserId = localStorage.getItem(STORAGE.userId);
+
+  function send() {
+    if (!postMessage || postMessage.length < 10) {
+      toast.warn('You need to specify at least 10 characters.', {
+        position: 'top-center',
+        hideProgressBar: true,
+        autoClose: 3000,
+        pauseOnHover: false,
+      });
+      return;
+    }
+
+    let content = postMessage;
+    setPostMessage('');
+    createNewFeed({ authorId: loggedUserId, content: content })
+    .then(resp => {
+      addNewFeed(resp.data);
+      toast.success('Feed has been published!', {
+        position: 'top-center',
+        hideProgressBar: true,
+        autoClose: 3000,
+        pauseOnHover: false,
+      });
+    });
+
+  }
+
   return (
     <div className="share">
       <div className="shareWrapper">
         <TextareaAutosize
+          value={postMessage}
+          onInput={e => setPostMessage(e.target.value)}
           placeholder="write a new post"
           className="shareInput"
-          style={{resize: 'none'}}
+          style={{ resize: 'none' }}
           minRows={1}
         />
         <hr/>
@@ -23,6 +60,7 @@ export default function Share() {
           </Button>
           <Button variant="contained"
                   endIcon={<Send/>}
+                  onClick={send}
                   sx={{ color: '#798a96', backgroundColor: '#1f2b36' }}
                   className="Button">
             Share
