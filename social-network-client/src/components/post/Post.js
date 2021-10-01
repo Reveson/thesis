@@ -1,18 +1,22 @@
 import './post.css'
 import { Comment, Person, ThumbUp } from '@mui/icons-material';
+import { getUsername } from '../../Common';
 
-export default function Post() {
+export default function Post(props) {
+  const {post, user} = props;
+
+
   return (
     <div className='post'>
       <div className='postWrapper'>
         <div className='postTop'>
           <Person/>
-          <span className='postUsername'>John Smith</span>
-          <span className='postDate'>5 min ago</span>
+          <span className='postUsername'>{getUsername(user)}</span>
+          <span className='postDate'>{new Date(post.timestamp).toLocaleString()}</span>
         </div>
 
         <div className='postCenter'>
-          <div className='postText'>Hello there! Its my post!</div>
+          <div className='postText'>{post.content}</div>
         </div>
         <div className='postBottom'>
           <div className='postLikes'>

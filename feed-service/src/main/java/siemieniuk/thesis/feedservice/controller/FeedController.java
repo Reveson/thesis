@@ -2,6 +2,7 @@ package siemieniuk.thesis.feedservice.controller;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
+import siemieniuk.thesis.feedservice.dto.FeedResponse;
 import siemieniuk.thesis.feedservice.dto.FollowRequest;
 import siemieniuk.thesis.feedservice.dto.NewFeedRequest;
 import siemieniuk.thesis.feedservice.model.FeedAuthor;
@@ -31,19 +33,21 @@ public class FeedController {
 
 	//TODO pagination
 	@GetMapping("/subscriber/{subscriberId}")
-	public ResponseEntity<List<FeedSubscriber>> getFeedsBySubscriber(
+	public ResponseEntity<List<FeedResponse>> getFeedsBySubscriber(
 			@PathVariable("subscriberId") long subscriberId) {
-		return ResponseEntity.ok(feedService.getFeedsBySubscriber(subscriberId));
+		return ResponseEntity.ok(feedService.getFeedsBySubscriber(subscriberId).stream()
+		.map(FeedResponse::asFeedResponse).collect(Collectors.toList()));
 	}
 
 	//TODO pagination
 	@GetMapping("/author/{authorId}")
-	public ResponseEntity<List<FeedAuthor>> getFeedsByAuthor(
+	public ResponseEntity<List<FeedResponse>> getFeedsByAuthor(
 			@PathVariable("authorId") long authorId) {
 		//TODO should be as pagination from frontend
 		long now = System.currentTimeMillis();
 		long defaultTimeFrom = now - TimeUnit.DAYS.toMillis(30);
-		return ResponseEntity.ok(feedService.getFeedsByAuthor(authorId, defaultTimeFrom, now));
+		return ResponseEntity.ok(feedService.getFeedsByAuthor(authorId, defaultTimeFrom, now)
+				.stream().map(FeedResponse::asFeedResponse).collect(Collectors.toList()));
 	}
 
 	@PostMapping("/new")

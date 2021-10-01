@@ -14,7 +14,7 @@ import lombok.Data;
 
 @Table("feed_subscriber")
 @Data
-public class FeedSubscriber {
+public class FeedSubscriber implements Feed {
 
 	@PrimaryKeyColumn(name = "subscriber_id", ordinal = 0, type = PARTITIONED)
 	private long subscriberId;

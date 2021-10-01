@@ -54,3 +54,11 @@ export function followUser(userFollowing, userFollowed) {
 export function unfollowUser(userFollowing, userFollowed) {
   return axios.post('feed-service/feed/unfollow', {userId: userFollowing, followedId: userFollowed});
 }
+
+export function getFeedsBySubscriber(userId) {
+  return axios.get('feed-service/feed/subscriber/' + userId);
+}
+
+export function getFeedsByAuthor(userId) {
+  return axios.get('feed-service/feed/author/' + userId);
+}

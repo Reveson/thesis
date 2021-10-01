@@ -13,7 +13,7 @@ import lombok.Data;
 
 @Table("feed_author")
 @Data
-public class FeedAuthor {
+public class FeedAuthor implements Feed {
 
 	@PrimaryKeyColumn(name = "author_id", ordinal = 0, type = PARTITIONED)
 	private long authorId;

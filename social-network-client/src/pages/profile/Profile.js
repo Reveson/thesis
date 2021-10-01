@@ -3,11 +3,20 @@ import Topbar from '../../components/topbar/Topbar';
 import { Add, Chat, Edit, Person, Remove } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import Post from '../../components/post/Post';
-import { followUser, getNumberOfFollowers, getNumberOfUsersFollowed, getUserById, isUserFollowed, unfollowUser } from '../../Api';
+import {
+  followUser,
+  getFeedsByAuthor,
+  getNumberOfFollowers,
+  getNumberOfUsersFollowed,
+  getUserById,
+  isUserFollowed,
+  unfollowUser,
+} from '../../Api';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { STORAGE } from '../../Constants';
 import EditProfileDialog from '../../components/editProfileDialog/EditProfileDialog';
+import { getUsername } from '../../Common';
 
 export default function Profile() {
   const { id } = useParams();
@@ -16,6 +25,7 @@ export default function Profile() {
   const [followedUsers, setFollowedUsers] = useState(0);
   const [followingUsers, setFollowingUsers] = useState(0);
   const [isFollowed, setIsFollowed] = useState(null);
+  const [feeds, setFeeds] = useState([]);
   const loggedUserId = localStorage.getItem(STORAGE.userId);
 
   useEffect(() => {
@@ -25,6 +35,8 @@ export default function Profile() {
     getNumberOfFollowers(id).then(resp => setFollowingUsers(resp.data));
     getNumberOfUsersFollowed(id).then(resp => setFollowedUsers(resp.data));
     isUserFollowed(localStorage.getItem(STORAGE.userId), id).then(resp => setIsFollowed(resp.data));
+
+    getFeedsByAuthor(id).then(resp => setFeeds(resp.data))
 
   }, []);
 
@@ -36,16 +48,6 @@ export default function Profile() {
     if (!birthday)
       return '';
     return (new Date(Date.now() - new Date(birthday).getTime()).getUTCFullYear() - 1970) + ' years';
-  }
-
-  function getUserName() {
-    if (!userProp('name') && !userProp('surname'))
-      return userProp('login');
-    if (!userProp('name'))
-      return userProp('surname');
-    if (!userProp('surname'))
-      return userProp('name');
-    return userProp('name') + ' ' + userProp('surname');
   }
 
   function onFollowClick() {
@@ -66,7 +68,7 @@ export default function Profile() {
           <div className="profileTopLeft">
             <div className="profilePhotoAndUsername">
               <Person className="profilePhoto"/>
-              <span className="profileUsername">{getUserName()}</span>
+              <span className="profileUsername">{getUsername(user)}</span>
             </div>
             <div className="profileLogin">
               <span>{user ? '@' + user['login'] : ''}</span>
@@ -121,9 +123,8 @@ export default function Profile() {
           </Button>
         </div>
       </div>
-      <Post/>
-      <Post/>
-      <Post/>
+      {feeds.sort((a, b) => (b.timestamp - a.timestamp) || 0)
+      .map(post => (<Post key={post.timestamp} post={post} user={user}/>))}
       {user && (<EditProfileDialog
         open={editProfileDialogOpen}
         onClose={() => setEditProfileDialogOpen(false)}
