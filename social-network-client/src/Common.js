@@ -1,4 +1,5 @@
 import { STORAGE } from './Constants';
+import React, { useEffect, useRef } from 'react';
 
 export function getUsername(user) {
   if (!user)
@@ -28,4 +29,25 @@ export function isLoggedIn() {
   return getCurrentUser()
     && tokenExpireTime
     && tokenExpireTime > Date.now();
+}
+
+//https://stackoverflow.com/questions/46140764/polling-api-every-x-seconds-with-react
+export const useInterval = (callback, delay) => {
+
+  const savedCallback = useRef();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      const id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
 }

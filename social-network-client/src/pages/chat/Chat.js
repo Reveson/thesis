@@ -7,7 +7,7 @@ import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getChatUserIds, getMessages, getUsersByIds, sendMessage } from '../../Api';
 import { useLocation } from 'react-router-dom';
-import { getCurrentUser } from '../../Common';
+import { getCurrentUser, useInterval } from '../../Common';
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
@@ -34,6 +34,12 @@ export default function Chat() {
     getMessages(currentUserId, user.id)
     .then(resp => setMessages(resp.data))
   };
+
+  useInterval(() => { //TODO incremental
+    if (selectedChatUser)
+      getMessages(currentUserId, selectedChatUser.id)
+      .then(resp => setMessages(resp.data))
+  }, 3000);
 
   const send = () => {
     if (textMessage === '')
