@@ -1,7 +1,7 @@
 import './login.css';
 import { Button } from '@mui/material';
 import { STORAGE, URLS } from '../../Constants';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useState } from 'react';
 import { login } from '../../Api';
 
@@ -38,7 +38,9 @@ export default function Login() {
             Submit
           </Button>
           <Button variant="contained"
-                  onClick={() => window.location.href = URLS.registrationForm}
+                  component={Link}
+                  to="/register"
+                  style={{ color: '#FFFFFF' }}
                   className="registerButton">
             Register new account
           </Button>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.AllArgsConstructor;
 import siemieniuk.thesis.userservice.dto.LoginRequest;
 import siemieniuk.thesis.userservice.dto.LoginResponse;
+import siemieniuk.thesis.userservice.dto.RegisterRequest;
 import siemieniuk.thesis.userservice.service.AuthenticationService;
 
 @RestController
@@ -24,5 +25,13 @@ public class AuthenticationController {
 	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
 		return ResponseEntity.status(OK).
 				body(authenticationService.loginAndGetJwtToken(loginRequest));
+	}
+
+	@PostMapping("/register")
+	public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
+
+		authenticationService.registerNewAccount(registerRequest);
+		return ResponseEntity.noContent().build();
+
 	}
 }

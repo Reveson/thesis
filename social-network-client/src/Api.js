@@ -9,6 +9,11 @@ export function login(loginRequest) {
   return promise;
 }
 
+export function registerAccount(registerRequest) {
+  delete axios.defaults.headers.common.Authorization;
+  return axios.post('user-service/register', registerRequest);
+}
+
 export function getUserById(userId) {
   return axios.get('user-service/user/' + userId);
 }

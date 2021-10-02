@@ -12,6 +12,9 @@ import org.springframework.util.MultiValueMap;
 import lombok.RequiredArgsConstructor;
 import siemieniuk.thesis.userservice.dto.LoginRequest;
 import siemieniuk.thesis.userservice.dto.LoginResponse;
+import siemieniuk.thesis.userservice.dto.RegisterKeycloakRequest;
+import siemieniuk.thesis.userservice.dto.RegisterRequest;
+import siemieniuk.thesis.userservice.dto.RegistrationBearerToken;
 import siemieniuk.thesis.userservice.dto.UserResponse;
 import siemieniuk.thesis.userservice.exception.EntityAlreadyExistsException;
 import siemieniuk.thesis.userservice.model.User;
@@ -38,6 +41,20 @@ public class AuthenticationService {
 		return response;
 	}
 
+	public void registerNewAccount(RegisterRequest request) {
+		ResponseEntity<String> response = keycloakFeignClient.getTokenForRegistration(getRegistrationTokenRequestBody());
+		if (response.getStatusCode() != HttpStatus.OK)
+			throw new RuntimeException(response.getBody()); //TODO concrete exception
+
+		RegistrationBearerToken token = RegistrationBearerToken.fromJson(response.getBody());
+
+		System.out.println(token.getAccessToken());
+
+		response = keycloakFeignClient.registerAccount(RegisterKeycloakRequest.fromRequest(request).asJson(), token.getAccessToken());
+		if (response.getStatusCode() != HttpStatus.CREATED)
+			throw new RuntimeException(response.getBody()); //TODO concrete exception
+	}
+
 	public User createNew(String login) {
 		if (userRepository.existsByLogin(login))
 			throw new EntityAlreadyExistsException(String.format("User with name %s already exists.", login));
@@ -56,6 +73,16 @@ public class AuthenticationService {
 		map.add("client_secret", environment.getProperty("keycloak.credentials.secret"));
 		map.add("username", loginRequest.getLogin());
 		map.add("password", loginRequest.getPassword());
+
+		return map;
+	}
+
+	private MultiValueMap<String, String> getRegistrationTokenRequestBody() {
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+		map.add("grant_type", "password");
+		map.add("client_id", environment.getProperty("registration-api.client-id"));
+		map.add("username", environment.getProperty("registration-api.username"));
+		map.add("password", environment.getProperty("registration-api.password"));
 
 		return map;
 	}

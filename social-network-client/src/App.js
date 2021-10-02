@@ -7,6 +7,7 @@ import { createGlobalStyle } from 'styled-components';
 import { COLORS } from './Constants';
 import Login from './pages/login/Login';
 import NotFound from './pages/notFound/NotFound';
+import Register from './pages/register/Register';
 
 const GlobalStyles = createGlobalStyle`
   html {
@@ -33,6 +34,9 @@ function App() {
           </Route>
           <Route path="/login">
             <Login/>
+          </Route>
+          <Route path="/register">
+            <Register/>
           </Route>
           <Route path="/notFound">
             <NotFound/>
