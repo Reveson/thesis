@@ -30,7 +30,7 @@ export default function Login() {
           <h3>Sign in</h3>
           <input className="loginInput" placeholder="login"
                  value={loginInput} onInput={e => setLoginInput(e.target.value)}/>
-          <input className="passwordInput" placeholder="password"
+          <input className="passwordInput" placeholder="password" type="password"
                  value={passInput} onInput={e => setPassInput(e.target.value)}/>
           <Button variant="contained"
                   onClick={handleLogin}
