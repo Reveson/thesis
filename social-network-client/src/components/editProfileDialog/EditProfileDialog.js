@@ -3,9 +3,9 @@ import { Button, Dialog, DialogContent, DialogTitle, Input } from '@mui/material
 import { Save } from '@mui/icons-material';
 import { useState } from 'react';
 import { editUser } from '../../Api';
-import { STORAGE } from '../../Constants';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getCurrentUser } from '../../Common';
 
 
 export default function EditProfileDialog(props) {
@@ -14,11 +14,12 @@ export default function EditProfileDialog(props) {
   const [surnameInput, setSurnameInput] = useState(user.surname ? user.surname : '');
   const [cityInput, setCityInput] = useState(user.city ? user.city : '');
   const [birthDateInput, setBirthDateInput] = useState(user.birthDate ? user.birthDate : '');
+  const currentUser = getCurrentUser();
 
   const sendEditUser = () => {
     editUser(
       {name : nameInput, surname : surnameInput, city: cityInput, birthDate : birthDateInput},
-      localStorage.getItem(STORAGE.userId))
+      currentUser.id)
     .then(() => window.location.reload())
 
   }

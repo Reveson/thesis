@@ -5,10 +5,10 @@ import NotificationList from '../notificationList/NotificationList';
 import UserListDialog from '../userListDialog/UserListDialog';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { STORAGE } from '../../Constants';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getNotifications, getNumberOfNotifications, getNumberOfUnreadMessages, getUsersByIds, getUsersIdsFollowed } from '../../Api';
+import { getCurrentUser } from '../../Common';
 
 export default function Topbar() {
   const [usersDialogOpen, setUsersDialogOpen] = useState(false);
@@ -16,16 +16,15 @@ export default function Topbar() {
   const [unreadNotifications, setUnreadNotifications] = useState(0);
   const [notificationsList, setNotificationsList] = useState([]);
   const [unreadMessages, setUnreadMessages] = useState(0);
-  const userLogin = localStorage.getItem(STORAGE.userLogin);
-  const userId = localStorage.getItem(STORAGE.userId);
+  const currentUser = getCurrentUser();
 
   useEffect(() => {
-    getNumberOfNotifications(userId).then(resp => setUnreadNotifications(resp.data));
-    getNumberOfUnreadMessages(userId).then(resp => setUnreadMessages(resp.data));
+    getNumberOfNotifications(currentUser.id).then(resp => setUnreadNotifications(resp.data));
+    getNumberOfUnreadMessages(currentUser.id).then(resp => setUnreadMessages(resp.data));
   }, []);
 
   const handleClickOpenUsers = () => {
-    getUsersIdsFollowed(userId).then(resp => {
+    getUsersIdsFollowed(currentUser.id).then(resp => {
       let userIds = resp.data;
       setUsersFollowed(userIds.map(userId => {
         return { id: userId };
@@ -42,7 +41,7 @@ export default function Topbar() {
   };
 
   const handleClickOpenNotifications = () => {
-    getNotifications(userId).then(resp => setNotificationsList(resp.data))
+    getNotifications(currentUser.id).then(resp => setNotificationsList(resp.data))
   }
 
   return (
@@ -78,7 +77,7 @@ export default function Topbar() {
             </div>
           </div>
           <span>
-            {userLogin ? 'Hello, ' + userLogin : ''}
+            {currentUser?.login ? 'Hello, ' + currentUser.login : ''}
           </span>
         </div>
       </div>

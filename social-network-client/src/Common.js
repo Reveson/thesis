@@ -1,3 +1,5 @@
+import { STORAGE } from './Constants';
+
 export function getUsername(user) {
   if (!user)
     return '';
@@ -9,5 +11,21 @@ export function getUsername(user) {
 
   if (username)
     return username;
-  return user.login
+  return user.login;
+}
+
+export function getCurrentUser() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE.user));
+  } catch (e) {
+    return null;
+  }
+
+}
+
+export function isLoggedIn() {
+  const tokenExpireTime = localStorage.getItem(STORAGE.tokenExpiresAt);
+  return getCurrentUser()
+    && tokenExpireTime
+    && tokenExpireTime > Date.now();
 }

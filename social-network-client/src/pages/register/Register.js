@@ -18,7 +18,6 @@ export default function Register() {
   const [passRepeatInput, setPassRepeatInput] = useState('');
 
   function handleRegister() {
-    console.log("clicked:)")
     if (!usernameInput || usernameInput.length < REGISTER.minUsernameLength)
       toastWarn('Username must have at least ' + REGISTER.minUsernameLength + ' characters.');
     else if (!passInput || passInput.length < REGISTER.minPasswordLength)

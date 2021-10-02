@@ -1,6 +1,6 @@
 import './login.css';
 import { Button } from '@mui/material';
-import { STORAGE, URLS } from '../../Constants';
+import { STORAGE } from '../../Constants';
 import { Link, useHistory } from 'react-router-dom';
 import { useState } from 'react';
 import { login } from '../../Api';
@@ -14,13 +14,10 @@ export default function Login() {
     login({login: loginInput, password: passInput})
     .then(resp => {
       localStorage.setItem(STORAGE.token, resp.data.accessToken);
-      localStorage.setItem(STORAGE.userId, resp.data.user.id);
-      localStorage.setItem(STORAGE.userLogin, resp.data.user.login);
+      localStorage.setItem(STORAGE.tokenExpiresAt, Date.now() + resp.data.expiresIn * 1000);
+      localStorage.setItem(STORAGE.user, JSON.stringify(resp.data.user));
       history.push('/');
     })
-    .catch(error => {
-      console.log(error);
-    });
   };
 
   return (

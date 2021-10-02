@@ -1,16 +1,16 @@
 import './share.css';
 import { AddPhotoAlternate, Send } from '@mui/icons-material';
-import { Button, Snackbar, TextareaAutosize } from '@mui/material';
+import { Button, TextareaAutosize } from '@mui/material';
 import { useState } from 'react';
 import { createNewFeed } from '../../Api';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { STORAGE } from '../../Constants';
+import { getCurrentUser } from '../../Common';
 
 export default function Share(props) {
   const { addNewFeed } = props;
   const [postMessage, setPostMessage] = useState('');
-  const loggedUserId = localStorage.getItem(STORAGE.userId);
+  const loggedUserId = getCurrentUser().id;
 
   function send() {
     if (!postMessage || postMessage.length < 10) {

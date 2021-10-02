@@ -1,10 +1,10 @@
-import './message.css'
+import './message.css';
 import { Person } from '@mui/icons-material';
-import { STORAGE } from '../../Constants';
+import { getCurrentUser } from '../../Common';
 
 export default function Message(props) {
   const {message} = props;
-  const own = localStorage.getItem(STORAGE.userId) == message.authorId
+  const own = getCurrentUser().id == message.authorId
 
 
   return (

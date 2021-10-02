@@ -1,12 +1,12 @@
 import Share from '../share/Share';
 import Post from '../post/Post';
 import { useEffect, useState } from 'react';
-import { STORAGE } from '../../Constants';
 import { getFeedsBySubscriber, getUsersByIds } from '../../Api';
+import { getCurrentUser } from '../../Common';
 
 export default function Feed() {
   const [feeds, setFeeds] = useState([]);
-  const loggedUserId = localStorage.getItem(STORAGE.userId);
+  const loggedUserId = getCurrentUser().id;
 
   function addNewFeed(feed) {
     setFeeds(feeds.concat(feed)); //TODO username

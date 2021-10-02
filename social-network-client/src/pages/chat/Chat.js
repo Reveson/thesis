@@ -4,10 +4,10 @@ import Conversation from '../../components/conversation/Conversation';
 import Message from '../../components/message/Message';
 import { Send } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import { useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { getChatUserIds, getMessages, getUsersByIds, sendMessage } from '../../Api';
-import { STORAGE } from '../../Constants';
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom';
+import { getCurrentUser } from '../../Common';
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
@@ -15,9 +15,10 @@ export default function Chat() {
   const [textMessage, setTextMessage] = useState('');
   const [selectedChatUser, setSelectedChatUser] = useState(null);
   const initialRecipient = useLocation().recipient;
+  const currentUserId = getCurrentUser().id
 
   useEffect(() => {
-    getChatUserIds(localStorage.getItem(STORAGE.userId))
+    getChatUserIds(currentUserId)
     .then(resp => {
       setChatUsers(resp.data.map(idElem => {
         return { id: idElem };
@@ -30,7 +31,7 @@ export default function Chat() {
 
   const selectChatUser = (user) => {
     setSelectedChatUser(user);
-    getMessages(localStorage.getItem(STORAGE.userId), user.id)
+    getMessages(currentUserId, user.id)
     .then(resp => setMessages(resp.data))
   };
 
@@ -38,8 +39,7 @@ export default function Chat() {
     if (textMessage === '')
       return;
 
-    sendMessage(localStorage.getItem(STORAGE.userId),
-      {recipientId: selectedChatUser.id, content: textMessage})
+    sendMessage(currentUserId, {recipientId: selectedChatUser.id, content: textMessage})
     .then(resp => setMessages(messages.concat(resp.data)))
     setTextMessage('');
   }

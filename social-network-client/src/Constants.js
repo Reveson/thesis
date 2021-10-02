@@ -9,12 +9,14 @@ export const URLS = {
 };
 
 export const STORAGE = {
+  user: 'user',
+  tokenExpiresAt: 'tokenExpiresAt',
   token: 'token',
   userId: 'userId',
-  userLogin: 'userLogin'
-}
+  userLogin: 'userLogin',
+};
 
 export const REGISTER = {
   minUsernameLength: 4,
-  minPasswordLength: 6
-}
+  minPasswordLength: 6,
+};

@@ -14,9 +14,8 @@ import {
 } from '../../Api';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { STORAGE } from '../../Constants';
 import EditProfileDialog from '../../components/editProfileDialog/EditProfileDialog';
-import { getUsername } from '../../Common';
+import { getCurrentUser, getUsername } from '../../Common';
 
 export default function Profile() {
   const { id } = useParams();
@@ -26,7 +25,7 @@ export default function Profile() {
   const [followingUsers, setFollowingUsers] = useState(0);
   const [isFollowed, setIsFollowed] = useState(null);
   const [feeds, setFeeds] = useState([]);
-  const loggedUserId = localStorage.getItem(STORAGE.userId);
+  const loggedUserId = getCurrentUser().id;
 
   useEffect(() => {
     getUserById(id).then(resp => setUser(resp.data))
@@ -34,7 +33,7 @@ export default function Profile() {
 
     getNumberOfFollowers(id).then(resp => setFollowingUsers(resp.data));
     getNumberOfUsersFollowed(id).then(resp => setFollowedUsers(resp.data));
-    isUserFollowed(localStorage.getItem(STORAGE.userId), id).then(resp => setIsFollowed(resp.data));
+    isUserFollowed(loggedUserId, id).then(resp => setIsFollowed(resp.data));
 
     getFeedsByAuthor(id).then(resp => setFeeds(resp.data))
 
