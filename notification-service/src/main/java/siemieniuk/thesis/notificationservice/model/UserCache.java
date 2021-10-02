@@ -12,6 +12,7 @@ import lombok.Data;
 public class UserCache {
 	public static final String KEY = "userCache";
 	public static final String UNREAD_NOTIFICATIONS = "unreadNotifications";
+	public static final String UNREAD_MESSAGES = "unreadMessages";
 
 	@Id
 	private long id;

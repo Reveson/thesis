@@ -22,6 +22,14 @@ public class UserCacheService {
 		setById(id, UserCache.UNREAD_NOTIFICATIONS, value);
 	}
 
+	public long getNumberOfNotifications(long userId) {
+		return getById(userId, UserCache.UNREAD_NOTIFICATIONS);
+	}
+
+	public long getNumberOfUnreadMessages(long userId) {
+		return getById(userId, UserCache.UNREAD_MESSAGES);
+	}
+
 	private Long incrementById(long id, String field, long incrementBy) {
 		String key = asRedisKey(KEY_BASE, id);
 		return redisTemplate.opsForHash().increment(key, field, incrementBy);
@@ -30,5 +38,15 @@ public class UserCacheService {
 	private void setById(long id, String field, long value) {
 		String key = asRedisKey(KEY_BASE, id);
 		redisTemplate.opsForHash().put(key, field, String.valueOf(value));
+	}
+
+	private long getById(long id, String field) {
+		String key = asRedisKey(KEY_BASE, id);
+		Object value = redisTemplate.opsForHash().get(key, field);
+
+		if (value == null)
+			return 0;
+
+		return Long.parseLong(value.toString());
 	}
 }

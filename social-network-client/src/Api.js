@@ -70,3 +70,16 @@ export function getFeedsByAuthor(userId) {
 export function createNewFeed(feedRequest) {
   return axios.post('feed-service/feed/new', feedRequest);
 }
+
+//notification service
+export function getNumberOfNotifications(userId) {
+  return axios.get('notification-service/notifications/' + userId + '/count');
+}
+
+export function getNumberOfUnreadMessages(userId) {
+  return axios.get('notification-service/messages/' + userId + '/count');
+}
+
+export function getNotifications(userId) {
+  return axios.get('notification-service/notifications/' + userId + '/list');
+}

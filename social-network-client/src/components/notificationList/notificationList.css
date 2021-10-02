@@ -1,7 +1,7 @@
 .notificationList {
   position: absolute;
-  background-color: #1f2b36;
-  border: var(--text-color);
+  background-color: var(--color-background);
+  color: var(--color-text);
   transform: translateX(-45%);
   width: 300px;
   top: 30px;
@@ -10,7 +10,7 @@
   border-radius: 10px;
 }
 
-.notificationItem:hover {
-  background-color: darkorange;
-  border-radius: 5px;
+.notificationList:hover {
+  color: var(--color-text);
+  cursor: initial;
 }

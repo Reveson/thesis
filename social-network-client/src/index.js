@@ -19,7 +19,10 @@ axios.interceptors.response.use(undefined, error => {
 
   const {status} = error.response;
 
-  toast.error("Got error with " + status + " code."); //TODO development only
+  if (status === 401)
+    window.location = "/login";
+  else
+    toast.error("Got error with " + status + " code."); //TODO development only
 
 });
 
