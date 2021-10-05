@@ -1,7 +1,6 @@
 package siemieniuk.thesis.userservice.config;
 
 import java.time.Instant;
-import java.util.NoSuchElementException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import lombok.AllArgsConstructor;
+import feign.FeignException;
 import lombok.Data;
 import siemieniuk.thesis.userservice.exception.NotFoundException;
 
@@ -24,6 +23,11 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(value = NotFoundException.class)
 	protected ResponseEntity<?> handleResourceNotFound(NotFoundException ex) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new JsonResponse(ex));
+	}
+
+	@ExceptionHandler(value = FeignException.class)
+	protected ResponseEntity<String> handleFeignResponse(FeignException ex) {
+		return ResponseEntity.status(ex.status()).body(ex.getMessage());
 	}
 
 	@Data

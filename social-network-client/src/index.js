@@ -7,28 +7,34 @@ import 'axios';
 import axios from 'axios';
 import { STORAGE, URLS } from './Constants';
 import { toast } from 'react-toastify';
+import { toastWarn } from './Common';
 
 axios.defaults.baseURL = URLS.backendUrl;
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem(STORAGE.token);
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.interceptors.response.use(undefined, error => {
   if (!error.response) {
-    toast.error("There has been network error while communicating with backend service.");
+    toast.error('There has been network error while communicating with backend service.');
     return;
   }
 
-  const {status} = error.response;
+  const { status } = error.response;
 
-  if (status === 401)
-    window.location = "/login";
-  else
-    toast.error("Got error with " + status + " code."); //TODO development only
+  if (status === 401) {
+    if (window.location.pathname !== '/login')
+      window.location = '/login';
+    else
+      toastWarn("Wrong username or password.");
+  }
+
+  if (status !== 401)
+    toast.error('Got error with ' + status + ' code.'); //TODO development only
 
 });
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App/>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );

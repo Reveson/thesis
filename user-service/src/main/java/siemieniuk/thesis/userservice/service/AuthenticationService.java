@@ -3,7 +3,6 @@ package siemieniuk.thesis.userservice.service;
 import javax.transaction.Transactional;
 
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -31,8 +30,6 @@ public class AuthenticationService {
 
 	public LoginResponse loginAndGetJwtToken(LoginRequest request) {
 		ResponseEntity<String> keycloakLoginResponse = keycloakFeignClient.getToken(mapLoginRequestToKeycloakBody(request));
-		if (keycloakLoginResponse.getStatusCode() != HttpStatus.OK)
-			throw new RuntimeException(keycloakLoginResponse.getBody()); //TODO concrete exception
 
 		var user = userRepository.getByLogin(request.getLogin()).orElseGet(() -> createNew(request.getLogin()));
 		LoginResponse response = LoginResponse.fromJson(keycloakLoginResponse.getBody());
@@ -43,16 +40,12 @@ public class AuthenticationService {
 
 	public void registerNewAccount(RegisterRequest request) {
 		ResponseEntity<String> response = keycloakFeignClient.getTokenForRegistration(getRegistrationTokenRequestBody());
-		if (response.getStatusCode() != HttpStatus.OK)
-			throw new RuntimeException(response.getBody()); //TODO concrete exception
 
 		RegistrationBearerToken token = RegistrationBearerToken.fromJson(response.getBody());
 
 		System.out.println(token.getAccessToken());
 
-		response = keycloakFeignClient.registerAccount(RegisterKeycloakRequest.fromRequest(request).asJson(), token.getAccessToken());
-		if (response.getStatusCode() != HttpStatus.CREATED)
-			throw new RuntimeException(response.getBody()); //TODO concrete exception
+		keycloakFeignClient.registerAccount(RegisterKeycloakRequest.fromRequest(request).asJson(), token.getAccessToken());
 	}
 
 	public User createNew(String login) {

@@ -7,6 +7,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { registerAccount } from '../../Api';
 import 'react-toastify/dist/ReactToastify.css';
 import { REGISTER } from '../../Constants';
+import { toastSuccess, toastWarn } from '../../Common';
 
 export default function Register() {
   let history = useHistory();
@@ -36,25 +37,6 @@ export default function Register() {
         setTimeout(() => history.push('/login'), redirectTime);
       });
     }
-
-  }
-
-  function toastWarn(text) {
-    toast.warn(text, {
-      position: 'top-center',
-      hideProgressBar: true,
-      autoClose: 3000,
-      pauseOnHover: false,
-    });
-  }
-
-  function toastSuccess(text, timeout) {
-    toast.success(text, {
-      position: 'top-center',
-      hideProgressBar: true,
-      autoClose: timeout,
-      pauseOnHover: false,
-    });
 
   }
 

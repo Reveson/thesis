@@ -4,6 +4,7 @@ import { STORAGE } from '../../Constants';
 import { Link, useHistory } from 'react-router-dom';
 import { useState } from 'react';
 import { login } from '../../Api';
+import { ToastContainer } from 'react-toastify';
 
 export default function Login() {
   let history = useHistory();
@@ -18,10 +19,12 @@ export default function Login() {
       localStorage.setItem(STORAGE.user, JSON.stringify(resp.data.user));
       history.push('/');
     })
+    .catch(() => {})
   };
 
   return (
     <div className="login">
+      <ToastContainer/>
       <div className="loginBox">
         <div className="loginBoxWrapper">
           <h3>Sign in</h3>

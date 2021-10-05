@@ -1,5 +1,6 @@
 import { STORAGE } from './Constants';
 import React, { useEffect, useRef } from 'react';
+import { toast } from 'react-toastify';
 
 export function getUsername(user) {
   if (!user)
@@ -50,4 +51,22 @@ export const useInterval = (callback, delay) => {
       return () => clearInterval(id);
     }
   }, [delay]);
+}
+
+export function toastWarn(text) {
+  toast.warn(text, {
+    position: 'top-center',
+    hideProgressBar: true,
+    autoClose: 3000,
+    pauseOnHover: false,
+  });
+}
+
+export function toastSuccess(text, timeout) {
+  toast.success(text, {
+    position: 'top-center',
+    hideProgressBar: true,
+    autoClose: timeout,
+    pauseOnHover: false,
+  });
 }
