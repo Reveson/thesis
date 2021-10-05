@@ -1,5 +1,5 @@
 import './topbar.css';
-import { Chat, Person, Search } from '@mui/icons-material';
+import { AccountCircle, Chat, Person, Search } from '@mui/icons-material';
 import TopbarDropdownItem from '../topbarDropdownItem/TopbarDropdownItem';
 import NotificationList from '../notificationList/NotificationList';
 import UserListDialog from '../userListDialog/UserListDialog';
@@ -41,8 +41,8 @@ export default function Topbar() {
   };
 
   const handleClickOpenNotifications = () => {
-    getNotifications(currentUser.id).then(resp => setNotificationsList(resp.data))
-  }
+    getNotifications(currentUser.id).then(resp => setNotificationsList(resp.data));
+  };
 
   return (
     <>
@@ -76,9 +76,12 @@ export default function Topbar() {
               </span>
             </div>
           </div>
-          <span>
-            {currentUser?.login ? 'Hello, ' + currentUser.login : ''}
-          </span>
+          <Link to={'user/' + getCurrentUser().id} className="topbarIconItem">
+            <span className="helloUser">
+              {currentUser?.login ? 'Hello, ' + currentUser.login : ''}
+            </span>
+            <AccountCircle/>
+          </Link>
         </div>
       </div>
       <UserListDialog
