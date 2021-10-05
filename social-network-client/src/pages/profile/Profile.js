@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import EditProfileDialog from '../../components/editProfileDialog/EditProfileDialog';
 import { getCurrentUser, getUsername } from '../../Common';
+import BottomBar from '../../components/bottombar/BottomBar';
 
 export default function Profile() {
   const { id } = useParams();
@@ -129,6 +130,7 @@ export default function Profile() {
         onClose={() => setEditProfileDialogOpen(false)}
         user={user}
       />)}
+      <BottomBar/>
     </>
   );
 }

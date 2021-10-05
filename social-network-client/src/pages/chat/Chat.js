@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { getChatUserIds, getMessages, getUsersByIds, sendMessage } from '../../Api';
 import { useLocation } from 'react-router-dom';
 import { getCurrentUser, useInterval } from '../../Common';
+import BottomBar from '../../components/bottombar/BottomBar';
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
@@ -53,7 +54,7 @@ export default function Chat() {
   if (initialRecipient && !selectedChatUser)
     selectChatUser(initialRecipient);
   return (
-    <div>
+    <>
       <Topbar/>
       <div className="chat">
         <div className="chatConversations">
@@ -89,6 +90,7 @@ export default function Chat() {
           </div>
         </div>
       </div>
-    </div>
+      <BottomBar/>
+    </>
   );
 }

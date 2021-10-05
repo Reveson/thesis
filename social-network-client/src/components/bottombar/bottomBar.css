@@ -1,0 +1,22 @@
+.bottomBar {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  height: 40px;
+  width: 100px;
+  border-radius: 10px;
+  position: fixed;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  bottom: 25px;
+  right: 25px;
+}
+
+.bottomBar:hover {
+  color: var(--color-text-hover);
+  cursor: pointer;
+}
+
+.logOutText {
+  margin-right: 5px;
+}
