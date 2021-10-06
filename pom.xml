@@ -25,6 +25,7 @@
 		<module>message-service</module>
 		<module>notification-service</module>
 		<module>user-service</module>
+		<module>search-service</module>
 	</modules>
 
 </project>
