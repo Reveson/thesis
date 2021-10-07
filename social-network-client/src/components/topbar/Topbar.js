@@ -9,6 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getNotifications, getNumberOfNotifications, getNumberOfUnreadMessages, getUsersByIds, getUsersIdsFollowed } from '../../Api';
 import { getCurrentUser } from '../../Common';
+import SearchBar from '../searchbar/SearchBar';
 
 export default function Topbar() {
   const [usersDialogOpen, setUsersDialogOpen] = useState(false);
@@ -48,10 +49,7 @@ export default function Topbar() {
     <>
       <div className="topbar">
         <Link to="/" className="topbarLogo">Social Network App</Link>
-        <div className="searchBar">
-          <Search/>
-          <input placeholder="Find a user" className="searchInput"/>
-        </div>
+        <SearchBar className="searchBar"/>
         <div className="topbarIcons">
           <div className="topbarIconGroup">
             <div className="topbarIconItem" onClick={handleClickOpenUsers}>

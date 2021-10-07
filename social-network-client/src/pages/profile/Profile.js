@@ -38,7 +38,7 @@ export default function Profile() {
 
     getFeedsByAuthor(id).then(resp => setFeeds(resp.data))
 
-  }, []);
+  }, [id]);
 
   function userProp(prop) {
     return user ? user[prop] : '';

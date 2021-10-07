@@ -30,15 +30,6 @@
 .topbarLogo:hover {
   color: var(--text-color);
 }
-.searchBar {
-  flex: 5;
-}
-
-.searchInput {
-  width: 80%;
-  height: 25px;
-  border-radius: 20px;
-}
 
 .searchInput:focus {
   outline: none;
