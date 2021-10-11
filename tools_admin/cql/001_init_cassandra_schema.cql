@@ -15,7 +15,6 @@ CREATE TABLE feed_subscriber
     subscriber_id bigint,
     timestamp     timeuuid,
     author_id     bigint,
-    author_name   text,
     content       text,
     photo         text,
     PRIMARY KEY ((subscriber_id), timestamp)
@@ -26,7 +25,6 @@ CREATE TABLE comment
     post_id     timeuuid,
     timestamp   timeuuid,
     author_id   bigint,
-    author_name text,
     content     text,
     PRIMARY KEY ((post_id), timestamp)
 ) WITH CLUSTERING ORDER BY (timestamp desc);
@@ -36,7 +34,6 @@ CREATE TABLE reaction
     post_id     timeuuid,
     timestamp   timeuuid,
     author_id   bigint,
-    author_name text,
     PRIMARY KEY ((post_id), timestamp)
 ) WITH CLUSTERING ORDER BY (timestamp desc);
 
