@@ -10,4 +10,5 @@ import siemieniuk.thesis.feedservice.model.FeedAuthor;
 
 public interface CommentRepository extends CassandraRepository<Comment, Long> {
 	List<Comment> findAllByPostId(UUID postId); //TODO limit
+	int countAllByPostId(UUID postId);
 }

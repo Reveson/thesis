@@ -14,7 +14,6 @@ public class NewCommentRequestToComment {
 		UUID timestamp = Uuids.timeBased();
 
 		comment.setAuthorId(request.getAuthorId());
-		comment.setAuthorName(request.getAuthorName());
 		comment.setPostId(postId);
 		comment.setContent(request.getContent());
 		comment.setTimestamp(timestamp);

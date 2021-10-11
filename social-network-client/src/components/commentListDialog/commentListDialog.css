@@ -1,0 +1,19 @@
+.comments {
+  overflow-y: auto;
+  max-height: 300px;
+}ó
+.commentsWrapper {
+  padding-right: 20px;
+}
+
+.addComment {
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+}
+
+.sendButtonDiv {
+  display: flex;
+  flex-direction: column;
+  align-content: space-around;
+}

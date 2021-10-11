@@ -10,6 +10,7 @@ import siemieniuk.thesis.feedservice.model.FeedSubscriber;
 @Data
 public class FeedResponse {
 
+	private String id;
 	private long userId;
 	private long timestamp;
 	private String content;
@@ -17,6 +18,7 @@ public class FeedResponse {
 
 	public static FeedResponse asFeedResponse(Feed feed) {
 		FeedResponse response = new FeedResponse();
+		response.setId(feed.getTimestamp().toString());
 		response.setUserId(feed.getAuthorId());
 		response.setTimestamp(toUnixTime(feed.getTimestamp()));
 		response.setContent(feed.getContent());

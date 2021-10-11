@@ -21,6 +21,10 @@ public class CommentService {
 		return commentRepository.findAllByPostId(postId);
 	}
 
+	public int count(UUID postId) {
+		return commentRepository.countAllByPostId(postId);
+	}
+
 	public Comment publishComment(UUID postId, NewCommentRequest request) {
 		Comment comment = NewCommentRequestToComment.map(postId, request);
 		return commentRepository.save(comment);

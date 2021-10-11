@@ -6,6 +6,5 @@ import lombok.Data;
 public class NewCommentRequest {
 
 	private long authorId;
-	private String authorName;
 	private String content;
 }
