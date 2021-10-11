@@ -34,8 +34,10 @@ CREATE TABLE reaction
     post_id     timeuuid,
     timestamp   timeuuid,
     author_id   bigint,
-    PRIMARY KEY ((post_id), timestamp)
+    PRIMARY KEY ((post_id, author_id), timestamp)
 ) WITH CLUSTERING ORDER BY (timestamp desc);
+
+CREATE INDEX reaction_post_id on reaction(post_id);
 
 CREATE TABLE notification
 (

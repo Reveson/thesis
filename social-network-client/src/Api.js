@@ -85,6 +85,22 @@ export function addComment(feedId, content) {
   return axios.post('feed-service/feed/' + feedId + '/comment/new', {authorId: getCurrentUser().id, content: content});
 }
 
+export function getCommentsCount(feedId, content) {
+  return axios.get('feed-service/feed/' + feedId + '/comment/count');
+}
+
+export function getReactions(feedId, userId) {
+  return axios.get('feed-service/feed/' + feedId + '/reaction/' + userId);
+}
+
+export function addReaction(feedId, userId) {
+  return axios.post('feed-service/feed/' + feedId + '/reaction/' + userId + '/add');
+}
+
+export function removeReaction(feedId, userId) {
+  return axios.post('feed-service/feed/' + feedId + '/reaction/' + userId + '/remove');
+}
+
 //notification service
 export function getNumberOfNotifications(userId) {
   return axios.get('notification-service/notifications/' + userId + '/count');

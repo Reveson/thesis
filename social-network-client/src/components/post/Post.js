@@ -2,13 +2,15 @@ import './post.css';
 import { Comment, Person, ThumbUp } from '@mui/icons-material';
 import { getCurrentUser, getUsername } from '../../Common';
 import CommentListDialog from '../commentListDialog/CommentListDialog';
-import { getComments, getUsersByIds } from '../../Api';
-import { useState } from 'react';
+import { addReaction, getComments, getCommentsCount, getReactions, getUsersByIds, removeReaction } from '../../Api';
+import { useEffect, useState } from 'react';
 
 export default function Post(props) {
   const { post, user } = props;
   const [commentsDialogOpen, setCommentsDialogOpen] = useState(false);
   const [comments, setComments] = useState([]);
+  const [commentsCount, setCommentsCount] = useState(0)
+  const [reactions, setReactions] = useState({count: 0, alreadyReacted: undefined}) //TODO typo
 
   const handleClickOpenComments = () => {
     getComments(post.id).then(resp => {
@@ -16,7 +18,6 @@ export default function Post(props) {
       getUsersByIds({userIds: [...new Set(commentsResp.map(comm => comm.userId))] }).then(usersResp => {
         const userIdToUser = new Map(usersResp.data.map(user => [user.id, user]));
         commentsResp.forEach(comm => comm.user = userIdToUser.get(comm.userId));
-        console.log(commentsResp);
         setComments(commentsResp);
       })
     });
@@ -32,6 +33,29 @@ export default function Post(props) {
     setComments(comments.concat(comment));
   }
 
+  function handleNewReaction() {
+    if (reactions.alreadyReacted === undefined)
+      return;
+
+    if (reactions.alreadyReacted) {
+      removeReaction(post.id, getCurrentUser().id)
+      setReactions({ count: reactions.count - 1, alreadyReacted: !reactions.alreadyReacted })
+    } else {
+      addReaction(post.id, getCurrentUser().id)
+      setReactions({ count: reactions.count + 1, alreadyReacted: !reactions.alreadyReacted })
+    }
+  }
+
+  useEffect(() => {
+    getCommentsCount(post.id)
+    .then(resp => setCommentsCount(resp.data));
+  }, [comments])
+
+  useEffect(() => {
+    getReactions(post.id, getCurrentUser().id)
+    .then(resp => setReactions(resp.data));
+  }, [])
+
   return (
     <>
       <div className="post">
@@ -46,13 +70,13 @@ export default function Post(props) {
             <div className="postText">{post.content}</div>
           </div>
           <div className="postBottom">
-            <div className="postLikes">
+            <div className="postLikes" onClick={handleNewReaction}>
               <ThumbUp/>
-              <span className="postLikeCounter">112 likes</span>
+              <span className="postLikeCounter">{reactions.count + (reactions.count === 1 ? " like" : " likes")}</span>
             </div>
-            <div className="postComments">
+            <div className="postComments" onClick={handleClickOpenComments}>
               <Comment/>
-              <span className="postCommentCounter" onClick={handleClickOpenComments}>See comments</span>
+              <span className="postCommentCounter">{commentsCount + (commentsCount === 1 ? " comment" : " comments")}</span>
             </div>
           </div>
         </div>

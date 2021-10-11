@@ -18,14 +18,14 @@ import siemieniuk.thesis.feedservice.dto.NewCommentRequest;
 import siemieniuk.thesis.feedservice.service.CommentService;
 
 @RestController
-@RequestMapping("/feed/{feedId}")
+@RequestMapping("/feed/{feedId}/comment")
 @AllArgsConstructor
 public class CommentController {
 
 	private final CommentService commentService;
 
 	//TODO pagination
-	@GetMapping("/comment")
+	@GetMapping
 	public ResponseEntity<List<CommentResponse>> getComments(
 			@PathVariable("feedId") String feedId) {
 		UUID postId = getUUID(feedId);
@@ -33,7 +33,14 @@ public class CommentController {
 		.map(CommentResponse::asCommentResponse).collect(Collectors.toList()));
 	}
 
-	@PostMapping("/comment/new")
+	@GetMapping("/count")
+	public ResponseEntity<Integer> count(
+			@PathVariable("feedId") String feedId) {
+		UUID postId = getUUID(feedId);
+		return ResponseEntity.ok(commentService.count(postId));
+	}
+
+	@PostMapping("/new")
 	public ResponseEntity<CommentResponse> publishComment(@PathVariable("feedId") String feedId,
 			@RequestBody NewCommentRequest request) {
 		UUID postId = getUUID(feedId);
