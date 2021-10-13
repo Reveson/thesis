@@ -70,3 +70,16 @@ export function toastSuccess(text, timeout) {
     pauseOnHover: false,
   });
 }
+
+export function toastError(text) {
+  toastErrorWithDelay(text, 3000);
+}
+
+export function toastErrorWithDelay(text, delay) {
+  toast.error(text, {
+    position: 'top-center',
+    hideProgressBar: true,
+    autoClose: delay,
+    pauseOnHover: false,
+  });
+}

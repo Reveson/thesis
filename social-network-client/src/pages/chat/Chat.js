@@ -7,8 +7,9 @@ import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getChatUserIds, getMessages, getUsersByIds, sendMessage } from '../../Api';
 import { useLocation } from 'react-router-dom';
-import { getCurrentUser, useInterval } from '../../Common';
+import { getCurrentUser, toastError, useInterval } from '../../Common';
 import BottomBar from '../../components/bottombar/BottomBar';
+import { MESSAGES } from '../../Constants';
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
@@ -16,7 +17,7 @@ export default function Chat() {
   const [textMessage, setTextMessage] = useState('');
   const [selectedChatUser, setSelectedChatUser] = useState(null);
   const initialRecipient = useLocation().recipient;
-  const currentUserId = getCurrentUser().id
+  const currentUserId = getCurrentUser().id;
 
   useEffect(() => {
     getChatUserIds(currentUserId)
@@ -26,30 +27,47 @@ export default function Chat() {
       }));
       getUsersByIds({ userIds: resp.data }).then(resp => {
         setChatUsers(resp.data);
+      }).catch(() => {
+        setChatUsers([]);
+        toastError(MESSAGES.messagesRequestError);
       });
-    })
+    }).catch(() => {
+      setChatUsers([]);
+      toastError(MESSAGES.messagesRequestError);
+    });
   }, []);
 
   const selectChatUser = (user) => {
     setSelectedChatUser(user);
     getMessages(currentUserId, user.id)
     .then(resp => setMessages(resp.data))
+    .catch(() => {
+      setMessages([]);
+      toastError(MESSAGES.messagesRequestError);
+    });
   };
 
   useInterval(() => { //TODO incremental
     if (selectedChatUser)
       getMessages(currentUserId, selectedChatUser.id)
-      .then(resp => setMessages(resp.data))
+      .then(resp => {
+        const data = resp.data;
+        setMessages(data);
+      }).catch(() => {});
   }, 3000);
 
   const send = () => {
     if (textMessage === '')
       return;
 
-    sendMessage(currentUserId, {recipientId: selectedChatUser.id, content: textMessage})
-    .then(resp => setMessages(messages.concat(resp.data)))
+    sendMessage(currentUserId, { recipientId: selectedChatUser.id, content: textMessage })
+    .then(resp => {
+      const newMessage = resp.data;
+      setMessages(messages.concat(newMessage));
+    })
+    .catch(() => toastError(MESSAGES.requestError));
     setTextMessage('');
-  }
+  };
 
   if (initialRecipient && !selectedChatUser)
     selectChatUser(initialRecipient);

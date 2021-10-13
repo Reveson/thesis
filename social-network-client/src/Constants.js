@@ -20,3 +20,10 @@ export const REGISTER = {
   minUsernameLength: 4,
   minPasswordLength: 6,
 };
+
+export const MESSAGES = {
+  requestError: "Could not complete your request. Please try again later.",
+  partialRequestError: "We are experiencing some network problems, not all data have been loaded.",
+  messagesRequestError: "We are experiencing some network problems, chats could not be loaded.",
+  loginError: "Could not complete your request. Probably our auth service is down. Please contact the administrator.",
+}

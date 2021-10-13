@@ -14,11 +14,12 @@ axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getIte
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.interceptors.response.use(undefined, error => {
   if (!error.response) {
-    toast.error('There has been network error while communicating with backend service.');
-    return;
+    throw new Error(error)
   }
-
   const { status } = error.response;
+  if (status === 500) {
+    throw new Error(error)
+  }
 
   if (status === 401) {
     if (window.location.pathname !== '/login')
@@ -26,10 +27,6 @@ axios.interceptors.response.use(undefined, error => {
     else
       toastWarn("Wrong username or password.");
   }
-
-  if (status !== 401)
-    toast.error('Got error with ' + status + ' code.'); //TODO development only
-
 });
 
 ReactDOM.render(

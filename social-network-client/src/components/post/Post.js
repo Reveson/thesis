@@ -1,9 +1,10 @@
 import './post.css';
 import { Comment, Person, ThumbUp } from '@mui/icons-material';
-import { getCurrentUser, getUsername } from '../../Common';
+import { getCurrentUser, getUsername, toastError } from '../../Common';
 import CommentListDialog from '../commentListDialog/CommentListDialog';
 import { addReaction, getComments, getCommentsCount, getReactions, getUsersByIds, removeReaction } from '../../Api';
 import { useEffect, useState } from 'react';
+import { MESSAGES } from '../../Constants';
 
 export default function Post(props) {
   const { post, user } = props;
@@ -19,9 +20,9 @@ export default function Post(props) {
         const userIdToUser = new Map(usersResp.data.map(user => [user.id, user]));
         commentsResp.forEach(comm => comm.user = userIdToUser.get(comm.userId));
         setComments(commentsResp);
-      })
-    });
-    setCommentsDialogOpen(true);
+        setCommentsDialogOpen(true);
+      }).catch(() => toastError(MESSAGES.requestError));
+    }).catch(() => toastError(MESSAGES.requestError));
   };
 
   const handleCloseComments = () => {
@@ -48,12 +49,14 @@ export default function Post(props) {
 
   useEffect(() => {
     getCommentsCount(post.id)
-    .then(resp => setCommentsCount(resp.data));
+    .then(resp => setCommentsCount(resp.data))
+    .catch(() => toastError(MESSAGES.partialRequestError));
   }, [comments])
 
   useEffect(() => {
     getReactions(post.id, getCurrentUser().id)
-    .then(resp => setReactions(resp.data));
+    .then(resp => setReactions(resp.data))
+    .catch(() => toastError(MESSAGES.partialRequestError));
   }, [])
 
   return (

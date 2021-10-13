@@ -1,10 +1,11 @@
 import './login.css';
 import { Button } from '@mui/material';
-import { STORAGE } from '../../Constants';
+import { MESSAGES, STORAGE } from '../../Constants';
 import { Link, useHistory } from 'react-router-dom';
 import { useState } from 'react';
 import { login } from '../../Api';
 import { ToastContainer } from 'react-toastify';
+import { toastError, toastErrorWithDelay } from '../../Common';
 
 export default function Login() {
   let history = useHistory();
@@ -19,7 +20,7 @@ export default function Login() {
       localStorage.setItem(STORAGE.user, JSON.stringify(resp.data.user));
       history.push('/');
     })
-    .catch(() => {})
+    .catch(() => toastErrorWithDelay(MESSAGES.loginError, 5000))
   };
 
   return (

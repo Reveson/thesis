@@ -3,8 +3,9 @@ import { Button, Dialog, DialogContent, DialogContentText, DialogTitle, Textarea
 import Comment from '../comment/Comment';
 import { Send } from '@mui/icons-material';
 import { useState } from 'react';
-import { toastSuccess, toastWarn } from '../../Common';
+import { toastError, toastSuccess, toastWarn } from '../../Common';
 import { addComment } from '../../Api';
+import { MESSAGES } from '../../Constants';
 
 export default function CommentListDialog(props) {
   const { open, onClose, comments, feedId, pushbackCommentToList } = props;
@@ -23,7 +24,8 @@ export default function CommentListDialog(props) {
     .then(resp => {
       pushbackCommentToList(resp.data);
       toastSuccess('Comment has been published!');
-    });
+    })
+    .catch(() => toastError(MESSAGES.requestError));
 
   }
 

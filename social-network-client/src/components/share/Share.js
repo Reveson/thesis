@@ -5,7 +5,8 @@ import { useState } from 'react';
 import { createNewFeed } from '../../Api';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getCurrentUser } from '../../Common';
+import { getCurrentUser, toastError } from '../../Common';
+import { MESSAGES } from '../../Constants';
 
 export default function Share(props) {
   const { addNewFeed } = props;
@@ -34,7 +35,7 @@ export default function Share(props) {
         autoClose: 3000,
         pauseOnHover: false,
       });
-    });
+    }).catch(() => toastError(MESSAGES.requestError));
 
   }
 

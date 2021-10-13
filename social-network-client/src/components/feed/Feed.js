@@ -2,7 +2,8 @@ import Share from '../share/Share';
 import Post from '../post/Post';
 import { useEffect, useState } from 'react';
 import { getFeedsBySubscriber, getUsersByIds } from '../../Api';
-import { getCurrentUser } from '../../Common';
+import { getCurrentUser, toastError } from '../../Common';
+import { MESSAGES } from '../../Constants';
 
 export default function Feed() {
   const [feeds, setFeeds] = useState([]);
@@ -17,12 +18,20 @@ export default function Feed() {
 
     getFeedsBySubscriber(loggedUserId).then(resp => {
       let feedsResp = resp.data;
-      getUsersByIds({userIds: [...new Set(feedsResp.map(feed => feed.userId))] }).then(usersResp => {
+      getUsersByIds({userIds: [...new Set(feedsResp.map(feed => feed.userId))] })
+      .then(usersResp => {
         let userIdToUser = new Map(usersResp.data.map(user => [user.id, user]));
         feedsResp.forEach(feed => feed.user = userIdToUser.get(feed.userId));
         setFeeds(feedsResp);
-      })
-    })
+      }).catch(() => {
+        toastError(MESSAGES.partialRequestError);
+        setFeeds([]);
+      });
+    }).catch(() => {
+      toastError(MESSAGES.partialRequestError);
+      setFeeds([]);
+    });
+
   }, []);
 
 

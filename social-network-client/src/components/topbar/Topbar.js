@@ -1,5 +1,5 @@
 import './topbar.css';
-import { AccountCircle, Chat, Person, Search } from '@mui/icons-material';
+import { AccountCircle, Chat, Person } from '@mui/icons-material';
 import TopbarDropdownItem from '../topbarDropdownItem/TopbarDropdownItem';
 import NotificationList from '../notificationList/NotificationList';
 import UserListDialog from '../userListDialog/UserListDialog';
@@ -8,8 +8,9 @@ import { Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getNotifications, getNumberOfNotifications, getNumberOfUnreadMessages, getUsersByIds, getUsersIdsFollowed } from '../../Api';
-import { getCurrentUser } from '../../Common';
+import { getCurrentUser, toastError } from '../../Common';
 import SearchBar from '../searchbar/SearchBar';
+import { MESSAGES } from '../../Constants';
 
 export default function Topbar() {
   const [usersDialogOpen, setUsersDialogOpen] = useState(false);
@@ -20,8 +21,8 @@ export default function Topbar() {
   const currentUser = getCurrentUser();
 
   useEffect(() => {
-    getNumberOfNotifications(currentUser.id).then(resp => setUnreadNotifications(resp.data));
-    getNumberOfUnreadMessages(currentUser.id).then(resp => setUnreadMessages(resp.data));
+    getNumberOfNotifications(currentUser.id).then(resp => setUnreadNotifications(resp.data)).catch(() => setUnreadNotifications(0));
+    getNumberOfUnreadMessages(currentUser.id).then(resp => setUnreadMessages(resp.data)).catch(() => setUnreadMessages(0));
   }, []);
 
   const handleClickOpenUsers = () => {
@@ -32,9 +33,15 @@ export default function Topbar() {
       }));
       getUsersByIds({ userIds: userIds }).then(usersResp => {
         setUsersFollowed(usersResp.data);
+        setUsersDialogOpen(true);
+      }).catch(() => {
+        setUsersFollowed([]);
+        toastError(MESSAGES.requestError);
       });
+    }).catch(() => {
+      setUsersFollowed([]);
+      toastError(MESSAGES.requestError);
     });
-    setUsersDialogOpen(true);
   };
 
   const handleCloseUsers = () => {
@@ -42,7 +49,12 @@ export default function Topbar() {
   };
 
   const handleClickOpenNotifications = () => {
-    getNotifications(currentUser.id).then(resp => setNotificationsList(resp.data));
+    getNotifications(currentUser.id)
+    .then(resp => setNotificationsList(resp.data))
+    .catch(() => {
+      setNotificationsList([]);
+      toastError(MESSAGES.requestError);
+    })
   };
 
   return (
@@ -67,14 +79,14 @@ export default function Topbar() {
           <div className="topbarIconGroup">
             <div className="topbarIconItem">
               <TopbarDropdownItem loadNotifications={handleClickOpenNotifications}>
-                <NotificationList notifications={notificationsList}/>
+                {notificationsList && notificationsList.length > 0 && <NotificationList notifications={notificationsList}/>}
               </TopbarDropdownItem>
               <span className={'topbarIconBadge' + (unreadNotifications === 0 ? ' hidden' : '')}>
                 {unreadNotifications}
               </span>
             </div>
           </div>
-          <Link to={'user/' + getCurrentUser().id} className="topbarIconItem">
+          <Link to={'/user/' + currentUser.id} className="topbarIconItem">
             <span className="helloUser">
               {currentUser?.login ? 'Hello, ' + currentUser.login : ''}
             </span>

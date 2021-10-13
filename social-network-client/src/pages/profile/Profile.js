@@ -13,32 +13,51 @@ import {
   unfollowUser,
 } from '../../Api';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import EditProfileDialog from '../../components/editProfileDialog/EditProfileDialog';
-import { getCurrentUser, getUsername } from '../../Common';
+import { getCurrentUser, getUsername, toastError } from '../../Common';
 import BottomBar from '../../components/bottombar/BottomBar';
+import { MESSAGES } from '../../Constants';
 
 export default function Profile() {
+  let history = useHistory();
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [editProfileDialogOpen, setEditProfileDialogOpen] = useState(false);
   const [followedUsers, setFollowedUsers] = useState(0);
   const [followingUsers, setFollowingUsers] = useState(0);
   const [isFollowed, setIsFollowed] = useState(null);
+  const [isError, setError] = useState(false);
   const [feeds, setFeeds] = useState([]);
   const loggedUserId = getCurrentUser().id;
 
   useEffect(() => {
-    getUserById(id).then(resp => setUser(resp.data))
-    .catch(err => window.location = '/notFound');
+    getUserById(id).then(resp => setUser(resp.data)).catch(() => history.push('/notFound'));
 
-    getNumberOfFollowers(id).then(resp => setFollowingUsers(resp.data));
-    getNumberOfUsersFollowed(id).then(resp => setFollowedUsers(resp.data));
-    isUserFollowed(loggedUserId, id).then(resp => setIsFollowed(resp.data));
+    getNumberOfFollowers(id).then(resp => setFollowingUsers(resp.data)).catch(() => {
+      setFollowingUsers(0);
+      setError(true);
+    });
+    getNumberOfUsersFollowed(id).then(resp => setFollowedUsers(resp.data)).catch(() => {
+      setFollowedUsers(0);
+      setError(true);
+    });
+    isUserFollowed(loggedUserId, id).then(resp => setIsFollowed(resp.data)).catch(() => {
+      setIsFollowed(null);
+      setError(true);
+    });
 
-    getFeedsByAuthor(id).then(resp => setFeeds(resp.data))
+    getFeedsByAuthor(id).then(resp => setFeeds(resp.data)).catch(() => {
+      setFeeds([]);
+      setError(true);
+    });
 
   }, [id]);
+
+  useEffect(() => {
+    if (isError)
+      toastError(MESSAGES.partialRequestError);
+  }, [isError])
 
   function userProp(prop) {
     return user ? user[prop] : '';
@@ -54,10 +73,12 @@ export default function Profile() {
     const changeFollow =
       isFollowed ? unfollowUser : followUser;
 
-    changeFollow(loggedUserId, id).then(() => {
+    changeFollow(loggedUserId, id)
+    .then(() => {
       setFollowingUsers(followingUsers + (isFollowed ? -1 : 1));
       setIsFollowed(!isFollowed);
-    });
+    })
+    .catch(() => toastError(MESSAGES.requestError));
   }
 
   return (
@@ -106,7 +127,7 @@ export default function Profile() {
                   className="profileButtonFollow">
             {isFollowed ? 'Unfollow' : 'Follow'}
           </Button>
-          <Link to={{ pathname: '/chat', recipient: user}} >
+          <Link to={{ pathname: '/chat', recipient: user }}>
             <Button variant="contained"
                     startIcon={<Chat/>}
                     sx={{ display: (loggedUserId != id ? '' : 'none') }}
@@ -129,6 +150,7 @@ export default function Profile() {
         open={editProfileDialogOpen}
         onClose={() => setEditProfileDialogOpen(false)}
         user={user}
+        setUser={setUser}
       />)}
       <BottomBar/>
     </>

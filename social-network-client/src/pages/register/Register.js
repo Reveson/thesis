@@ -6,8 +6,8 @@ import { Link, useHistory } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import { registerAccount } from '../../Api';
 import 'react-toastify/dist/ReactToastify.css';
-import { REGISTER } from '../../Constants';
-import { toastSuccess, toastWarn } from '../../Common';
+import { MESSAGES, REGISTER } from '../../Constants';
+import { toastErrorWithDelay, toastSuccess, toastWarn } from '../../Common';
 
 export default function Register() {
   let history = useHistory();
@@ -35,7 +35,7 @@ export default function Register() {
         let redirectTime = 5000;
         toastSuccess("Account has been created. You will be redirected to login page in " + redirectTime/1000 + " seconds.", redirectTime);
         setTimeout(() => history.push('/login'), redirectTime);
-      });
+      }).catch(() => toastErrorWithDelay(MESSAGES.loginError, 5000));
     }
 
   }
