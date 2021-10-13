@@ -1,16 +1,15 @@
 import './userListElement.css';
-import { Add, Chat, Person } from '@mui/icons-material';
+import { Chat, Person } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { STORAGE } from '../../Constants';
 import { getUsername } from '../../Common';
 
 export default function UserListElement(props) {
-  const { user } = props;
+  const { user, redirectToUserPage } = props;
 
 
   return (
     <div className="userListElement">
-      <a onClick={() => window.location.href = '/user/' + user.id} className="usernameWithPhoto">
+      <a onClick={redirectToUserPage} className="usernameWithPhoto">
         <Person/>
         <span className="username">{getUsername(user)}</span>
       </a>
