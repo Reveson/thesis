@@ -11,7 +11,7 @@
 	<packaging>pom</packaging>
 	<groupId>siemieniuk.thesis</groupId>
 	<artifactId>thesis-parent-pom</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>thesis-parent-pom</name>
 	<description>Parent pom</description>
 	<properties>
