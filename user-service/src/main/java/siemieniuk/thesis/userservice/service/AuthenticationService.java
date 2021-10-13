@@ -43,17 +43,22 @@ public class AuthenticationService {
 
 		RegistrationBearerToken token = RegistrationBearerToken.fromJson(response.getBody());
 
-		System.out.println(token.getAccessToken());
-
 		keycloakFeignClient.registerAccount(RegisterKeycloakRequest.fromRequest(request).asJson(), token.getAccessToken());
+		createNew(request.getUsername(), request.getFirstName(), request.getLastName());
 	}
 
-	public User createNew(String login) {
+	private User createNew(String login) {
+		return createNew(login, null, null);
+	}
+
+	private User createNew(String login, String name, String surname) {
 		if (userRepository.existsByLogin(login))
 			throw new EntityAlreadyExistsException(String.format("User with name %s already exists.", login));
 
 		User user = new User();
 		user.setLogin(login);
+		user.setName(name);
+		user.setSurname(surname);
 		user.setPrivileges(2); //TODO hardcode
 
 		return userRepository.save(user);
