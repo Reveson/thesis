@@ -16,22 +16,6 @@ export function getUsername(user) {
   return user.login;
 }
 
-export function getCurrentUser() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE.user));
-  } catch (e) {
-    return null;
-  }
-
-}
-
-export function isLoggedIn() {
-  const tokenExpireTime = localStorage.getItem(STORAGE.tokenExpiresAt);
-  return getCurrentUser()
-    && tokenExpireTime
-    && tokenExpireTime > Date.now();
-}
-
 //https://stackoverflow.com/questions/46140764/polling-api-every-x-seconds-with-react
 export const useInterval = (callback, delay) => {
 
@@ -51,6 +35,11 @@ export const useInterval = (callback, delay) => {
       return () => clearInterval(id);
     }
   }, [delay]);
+}
+
+export function clearToken() {
+  localStorage.setItem(STORAGE.token, '');
+  localStorage.setItem(STORAGE.tokenExpiresAt, 0)
 }
 
 export function toastWarn(text) {

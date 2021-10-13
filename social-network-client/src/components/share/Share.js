@@ -5,11 +5,11 @@ import { useState } from 'react';
 import { createNewFeed } from '../../Api';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getCurrentUser, toastError } from '../../Common';
+import { toastError } from '../../Common';
 import { MESSAGES } from '../../Constants';
 
 export default function Share(props) {
-  const { addNewFeed } = props;
+  const { addNewFeed, getCurrentUser } = props;
   const [postMessage, setPostMessage] = useState('');
   const loggedUserId = getCurrentUser().id;
 

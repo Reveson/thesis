@@ -5,12 +5,10 @@ import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'axios';
 import axios from 'axios';
-import { STORAGE, URLS } from './Constants';
-import { toast } from 'react-toastify';
+import { MESSAGES, URLS } from './Constants';
 import { toastWarn } from './Common';
 
 axios.defaults.baseURL = URLS.backendUrl;
-axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem(STORAGE.token);
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.interceptors.response.use(undefined, error => {
   if (!error.response) {
@@ -25,7 +23,7 @@ axios.interceptors.response.use(undefined, error => {
     if (window.location.pathname !== '/login')
       window.location = '/login';
     else
-      toastWarn("Wrong username or password.");
+      throw new Error(MESSAGES.http401)
   }
 });
 

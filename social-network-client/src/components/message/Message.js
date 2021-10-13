@@ -1,9 +1,8 @@
 import './message.css';
 import { Person } from '@mui/icons-material';
-import { getCurrentUser } from '../../Common';
 
 export default function Message(props) {
-  const {message} = props;
+  const {message, getCurrentUser} = props;
   const own = getCurrentUser().id == message.authorId
 
 

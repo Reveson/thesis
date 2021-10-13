@@ -5,10 +5,10 @@ import { Link, useHistory } from 'react-router-dom';
 import { useState } from 'react';
 import { login } from '../../Api';
 import { ToastContainer } from 'react-toastify';
-import { toastError, toastErrorWithDelay } from '../../Common';
+import { toastErrorWithDelay, toastWarn } from '../../Common';
 
-export default function Login() {
-  let history = useHistory();
+export default function Login(props) {
+  const { setCurrentUser, setToken, setTokenExp } = props
   const [loginInput, setLoginInput] = useState('');
   const [passInput, setPassInput] = useState('');
 
@@ -18,9 +18,17 @@ export default function Login() {
       localStorage.setItem(STORAGE.token, resp.data.accessToken);
       localStorage.setItem(STORAGE.tokenExpiresAt, Date.now() + resp.data.expiresIn * 1000);
       localStorage.setItem(STORAGE.user, JSON.stringify(resp.data.user));
-      history.push('/');
+      setCurrentUser(localStorage.getItem(STORAGE.user));
+      setToken(localStorage.getItem(STORAGE.token));
+      setTokenExp(localStorage.getItem(STORAGE.tokenExpiresAt));
+      window.location = '/';
     })
-    .catch(() => toastErrorWithDelay(MESSAGES.loginError, 5000))
+    .catch(err => {
+      if (err?.message === MESSAGES.http401)
+        toastWarn("Wrong username or password.");
+      else
+        toastErrorWithDelay(MESSAGES.loginError, 5000);
+    })
   };
 
   return (

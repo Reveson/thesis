@@ -8,11 +8,12 @@ import { Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getNotifications, getNumberOfNotifications, getNumberOfUnreadMessages, getUsersByIds, getUsersIdsFollowed } from '../../Api';
-import { getCurrentUser, toastError } from '../../Common';
+import { toastError } from '../../Common';
 import SearchBar from '../searchbar/SearchBar';
 import { MESSAGES } from '../../Constants';
 
-export default function Topbar() {
+export default function Topbar(props) {
+  const { getCurrentUser } = props;
   const [usersDialogOpen, setUsersDialogOpen] = useState(false);
   const [usersFollowed, setUsersFollowed] = useState([]);
   const [unreadNotifications, setUnreadNotifications] = useState(0);

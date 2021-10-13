@@ -15,11 +15,12 @@ import {
 import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import EditProfileDialog from '../../components/editProfileDialog/EditProfileDialog';
-import { getCurrentUser, getUsername, toastError } from '../../Common';
+import { getUsername, toastError } from '../../Common';
 import BottomBar from '../../components/bottombar/BottomBar';
 import { MESSAGES } from '../../Constants';
 
-export default function Profile() {
+export default function Profile(props) {
+  const { getCurrentUser } = props;
   let history = useHistory();
   const { id } = useParams();
   const [user, setUser] = useState(null);
@@ -83,7 +84,7 @@ export default function Profile() {
 
   return (
     <>
-      <Topbar/>
+      <Topbar getCurrentUser={getCurrentUser}/>
       <div className="profile">
         <div className="profileTop">
           <div className="profileTopLeft">
@@ -145,12 +146,13 @@ export default function Profile() {
         </div>
       </div>
       {feeds.sort((a, b) => (b.timestamp - a.timestamp) || 0)
-      .map(post => (<Post key={post.timestamp} post={post} user={user}/>))}
+      .map(post => (<Post key={post.timestamp} post={post} user={user} getCurrentUser={getCurrentUser}/>))}
       {user && (<EditProfileDialog
         open={editProfileDialogOpen}
         onClose={() => setEditProfileDialogOpen(false)}
         user={user}
         setUser={setUser}
+        getCurrentUser={getCurrentUser}
       />)}
       <BottomBar/>
     </>

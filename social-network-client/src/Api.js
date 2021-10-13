@@ -1,13 +1,9 @@
 import axios from 'axios';
-import { STORAGE } from './Constants';
-import { getCurrentUser } from './Common';
 
 //user service
 export function login(loginRequest) {
   delete axios.defaults.headers.common.Authorization;
-  const promise = axios.post('user-service/login', loginRequest);
-  axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem(STORAGE.token);
-  return promise;
+  return axios.post('user-service/login', loginRequest);
 }
 
 export function registerAccount(registerRequest) {
@@ -81,8 +77,8 @@ export function getComments(feedId) {
   return axios.get('feed-service/feed/' + feedId + '/comment');
 }
 
-export function addComment(feedId, content) {
-  return axios.post('feed-service/feed/' + feedId + '/comment/new', {authorId: getCurrentUser().id, content: content});
+export function addComment(userId, feedId, content) {
+  return axios.post('feed-service/feed/' + feedId + '/comment/new', {authorId: userId, content: content});
 }
 
 export function getCommentsCount(feedId, content) {

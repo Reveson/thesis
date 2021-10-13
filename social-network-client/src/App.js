@@ -1,14 +1,17 @@
 import './app.css';
 import Home from './pages/home/Home';
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import Chat from './pages/chat/Chat';
 import Profile from './pages/profile/Profile';
 import { createGlobalStyle } from 'styled-components';
-import { COLORS } from './Constants';
+import { COLORS, STORAGE } from './Constants';
 import Login from './pages/login/Login';
 import NotFound from './pages/notFound/NotFound';
 import Register from './pages/register/Register';
-import { isLoggedIn } from './Common';
+import { clearToken, isLoggedIn } from './Common';
+import { useState } from 'react';
+import axios from 'axios';
+import Logout from './pages/logout/Logout';
 
 const GlobalStyles = createGlobalStyle`
   html {
@@ -19,6 +22,34 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 function App() {
+  const [currentUser, setCurrentUser] = useState(getCurrentUser());
+  const [token, setToken] = useState(localStorage.getItem(STORAGE.token));
+  const [tokenExp, setTokenExp] = useState(localStorage.getItem(STORAGE.tokenExpiresAt));
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+
+  function getCurrentUser() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE.user));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function isLoggedIn() {
+    return currentUser
+      && tokenExp
+      && tokenExp > Date.now();
+  }
+
+  function logOut() {
+    if (isLoggedIn()) {
+      clearToken();
+      setToken(localStorage.getItem(STORAGE.token));
+      setTokenExp(localStorage.getItem(STORAGE.tokenExpiresAt));
+    }
+    window.location = "/login";
+  }
+
   function renderIfLoggedIn(component) {
     return () => isLoggedIn() ? component : (<Redirect to="/login"/>)
   }
@@ -31,11 +62,12 @@ function App() {
       <GlobalStyles/>
       <Router>
         <Switch>
-          <Route exact path="/" render={renderIfLoggedIn((<Home/>))} />
-          <Route path="/chat" render={renderIfLoggedIn((<Chat/>))} />
-          <Route path="/user/:id" render={renderIfLoggedIn((<Profile/>))} />
-          <Route path="/login" render={renderIfNotLoggedIn((<Login/>))} />
+          <Route exact path="/" render={renderIfLoggedIn((<Home getCurrentUser={() => currentUser}/>))} />
+          <Route path="/chat" render={renderIfLoggedIn((<Chat getCurrentUser={() => currentUser}/>))} />
+          <Route path="/user/:id" render={renderIfLoggedIn((<Profile getCurrentUser={() => currentUser}/>))} />
+          <Route path="/login" render={renderIfNotLoggedIn((<Login setCurrentUser={setCurrentUser} setToken={setToken} setTokenExp={setTokenExp}/>))} />
           <Route path="/register" render={renderIfNotLoggedIn((<Register/>))} />
+          <Route path="/logout" render={() => (<Logout logOut={logOut} />)} />
           <Route path="/notFound" component={NotFound} />
           <Route path="*" render={() => (<Redirect to="/notFound"/>)} />
         </Switch>

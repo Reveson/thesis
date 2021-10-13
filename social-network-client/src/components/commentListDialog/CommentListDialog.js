@@ -8,7 +8,7 @@ import { addComment } from '../../Api';
 import { MESSAGES } from '../../Constants';
 
 export default function CommentListDialog(props) {
-  const { open, onClose, comments, feedId, pushbackCommentToList } = props;
+  const { open, onClose, comments, feedId, pushbackCommentToList, getCurrentUser } = props;
   const [commentMessage, setCommentMessage] = useState('');
 
 
@@ -20,7 +20,7 @@ export default function CommentListDialog(props) {
 
     let content = commentMessage;
     setCommentMessage('');
-    addComment(feedId, content)
+    addComment(getCurrentUser().id, feedId, content)
     .then(resp => {
       pushbackCommentToList(resp.data);
       toastSuccess('Comment has been published!');

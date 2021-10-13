@@ -5,12 +5,12 @@ import { useState } from 'react';
 import { editUser } from '../../Api';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getCurrentUser, toastError } from '../../Common';
+import { toastError } from '../../Common';
 import { MESSAGES } from '../../Constants';
 
 
 export default function EditProfileDialog(props) {
-  const { open, onClose, user, setUser } = props;
+  const { open, onClose, user, setUser, getCurrentUser } = props;
   const [nameInput, setNameInput] = useState(user.name ? user.name : '');
   const [surnameInput, setSurnameInput] = useState(user.surname ? user.surname : '');
   const [cityInput, setCityInput] = useState(user.city ? user.city : '');

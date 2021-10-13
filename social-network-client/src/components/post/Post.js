@@ -1,13 +1,13 @@
 import './post.css';
 import { Comment, Person, ThumbUp } from '@mui/icons-material';
-import { getCurrentUser, getUsername, toastError } from '../../Common';
+import { getUsername, toastError } from '../../Common';
 import CommentListDialog from '../commentListDialog/CommentListDialog';
 import { addReaction, getComments, getCommentsCount, getReactions, getUsersByIds, removeReaction } from '../../Api';
 import { useEffect, useState } from 'react';
 import { MESSAGES } from '../../Constants';
 
 export default function Post(props) {
-  const { post, user } = props;
+  const { post, user, getCurrentUser } = props;
   const [commentsDialogOpen, setCommentsDialogOpen] = useState(false);
   const [comments, setComments] = useState([]);
   const [commentsCount, setCommentsCount] = useState(0)

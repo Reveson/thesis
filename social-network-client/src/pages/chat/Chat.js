@@ -7,11 +7,12 @@ import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getChatUserIds, getMessages, getUsersByIds, sendMessage } from '../../Api';
 import { useLocation } from 'react-router-dom';
-import { getCurrentUser, toastError, useInterval } from '../../Common';
+import { toastError, useInterval } from '../../Common';
 import BottomBar from '../../components/bottombar/BottomBar';
 import { MESSAGES } from '../../Constants';
 
-export default function Chat() {
+export default function Chat(props) {
+  const { getCurrentUser } = props;
   const [messages, setMessages] = useState([]);
   const [chatUsers, setChatUsers] = useState([]);
   const [textMessage, setTextMessage] = useState('');
@@ -73,7 +74,7 @@ export default function Chat() {
     selectChatUser(initialRecipient);
   return (
     <>
-      <Topbar/>
+      <Topbar getCurrentUser={getCurrentUser}/>
       <div className="chat">
         <div className="chatConversations">
           <div className="chatConversationsWrapper">
