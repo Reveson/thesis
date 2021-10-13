@@ -37,19 +37,19 @@ export default function EditProfileDialog(props) {
         <DialogContent>
           <div className="editGroup">
             <div className="key">name:</div>
-            <Input className="input" value={nameInput} onInput={e => setNameInput(e.target.value)}/>
+            <input className="input" value={nameInput} onInput={e => setNameInput(e.target.value)}/>
           </div>
           <div className="editGroup">
             <div className="key">surname:</div>
-            <Input className="input" value={surnameInput} onInput={e => setSurnameInput(e.target.value)}/>
+            <input className="input" value={surnameInput} onInput={e => setSurnameInput(e.target.value)}/>
           </div>
           <div className="editGroup">
             <div className="key">city:</div>
-            <Input className="input" value={cityInput} onInput={e => setCityInput(e.target.value)}/>
+            <input className="input" value={cityInput} onInput={e => setCityInput(e.target.value)}/>
           </div>
           <div className="editGroup">
             <div className="key">birthday:</div>
-            <Input className="input" value={birthDateInput} onInput={e => setBirthDateInput(e.target.value)}/>
+            <input type="date" className="input" value={birthDateInput} onInput={e => setBirthDateInput(e.target.value)}/>
           </div>
           <div className="saveWrapper">
             <Button

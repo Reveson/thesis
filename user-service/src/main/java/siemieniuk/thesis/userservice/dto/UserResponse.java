@@ -1,5 +1,6 @@
 package siemieniuk.thesis.userservice.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -14,8 +15,7 @@ public class UserResponse {
 	private String name;
 	private String surname;
 	private String city;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-	private Date birthDate;
+	private String birthDate;
 
 	public static UserResponse fromUser(User user) {
 		UserResponse response = new UserResponse();
@@ -24,8 +24,15 @@ public class UserResponse {
 		response.setName(user.getName());
 		response.setSurname(user.getSurname());
 		response.setCity(user.getCity());
-		response.setBirthDate(user.getBirthDate());
+		response.setBirthDate(parseDate(user.getBirthDate()));
 
 		return response;
+	}
+
+	private static String parseDate(Date date) {
+		if (date == null)
+			return null;
+
+		return new SimpleDateFormat("yyyy-MM-dd").format(date);
 	}
 }

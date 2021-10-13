@@ -12,7 +12,7 @@ public class ChangeInfoRequest {
 	private String name;
 	private String surname;
 	private String city;
-	@JsonFormat(pattern="dd-MM-yyyy")
+	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date birthDate;
 	private boolean isPrivate;
 }

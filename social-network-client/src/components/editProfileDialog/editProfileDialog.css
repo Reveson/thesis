@@ -1,4 +1,10 @@
+.editGroup {
+  margin-bottom: 10px;
+  display: flex;
+}
+
 .key {
+  margin-top: 8px;
   display: inline-block;
   width: 80px;
   text-align: right;
@@ -6,8 +12,8 @@
   padding-right: 5px;
 }
 
-.editGroup {
-  margin-bottom: 10px;
+.input {
+  flex-grow: 1;
 }
 
 .saveWrapper {
