@@ -28,7 +28,9 @@ export default function Share(props) {
     setPostMessage('');
     createNewFeed({ authorId: loggedUserId, content: content })
     .then(resp => {
-      addNewFeed(resp.data);
+      let newFeed = resp.data;
+      newFeed.user = getCurrentUser();
+      addNewFeed(newFeed);
       toast.success('Feed has been published!', {
         position: 'top-center',
         hideProgressBar: true,

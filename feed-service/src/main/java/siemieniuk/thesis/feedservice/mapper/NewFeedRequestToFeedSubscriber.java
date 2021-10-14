@@ -11,7 +11,6 @@ public class NewFeedRequestToFeedSubscriber {
 	public static FeedSubscriber map(NewFeedRequest request, UUID timestamp, long subscriberId) {
 		FeedSubscriber feedSubscriber = new FeedSubscriber();
 		feedSubscriber.setSubscriberId(subscriberId);
-		feedSubscriber.setAuthorName(request.getAuthorName());
 		feedSubscriber.setAuthorId(request.getAuthorId());
 		feedSubscriber.setContent(request.getContent());
 		feedSubscriber.setPhoto(request.getPhotoUrl());

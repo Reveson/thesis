@@ -90,6 +90,7 @@ export default function Post(props) {
         comments={comments}
         feedId={post.id}
         pushbackCommentToList={addNewComment}
+        getCurrentUser={getCurrentUser}
       />
     </>
   );

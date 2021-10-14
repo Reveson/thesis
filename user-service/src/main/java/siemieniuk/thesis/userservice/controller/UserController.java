@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,10 +48,9 @@ public class UserController {
 		return ResponseEntity.ok(UserResponse.fromUser(userService.changeInfo(userId, request)));
 	}
 
-	//TODO not to be visible in public API
 	@PostMapping("{userId}/keepAlive")
-	public ResponseEntity<?> setUserActive(@PathVariable("userId") long userId) {
-		userActivityService.setUserActive(userId);
+	public ResponseEntity<?> setUserActive(@RequestHeader("Authorization") String bearerToken, @PathVariable("userId") long userId) {
+		userActivityService.setUserActive(userId, bearerToken);
 
 		return ResponseEntity.noContent().build();
 	}

@@ -1,6 +1,6 @@
 import './app.css';
 import Home from './pages/home/Home';
-import { BrowserRouter as Router, Redirect, Route, Switch, useHistory } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import Chat from './pages/chat/Chat';
 import Profile from './pages/profile/Profile';
 import { createGlobalStyle } from 'styled-components';
@@ -8,10 +8,11 @@ import { COLORS, STORAGE } from './Constants';
 import Login from './pages/login/Login';
 import NotFound from './pages/notFound/NotFound';
 import Register from './pages/register/Register';
-import { clearToken, isLoggedIn } from './Common';
+import { clearToken, useInterval } from './Common';
 import { useState } from 'react';
 import axios from 'axios';
 import Logout from './pages/logout/Logout';
+import { keepAlive } from './Api';
 
 const GlobalStyles = createGlobalStyle`
   html {
@@ -34,6 +35,13 @@ function App() {
       return null;
     }
   }
+
+  useInterval(() => {
+    if (isLoggedIn())
+      keepAlive(currentUser.id)
+      .then(() => {})
+      .catch(() => {});
+  }, 5 * 60 * 1000);
 
   function isLoggedIn() {
     return currentUser

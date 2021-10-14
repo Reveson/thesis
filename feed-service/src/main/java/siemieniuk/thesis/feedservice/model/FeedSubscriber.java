@@ -22,8 +22,6 @@ public class FeedSubscriber implements Feed {
 	private UUID timestamp;
 	@Column("author_id")
 	private long authorId;
-	@Column("author_name")
-	private String authorName;
 	private String content;
 	private String photo;
 }

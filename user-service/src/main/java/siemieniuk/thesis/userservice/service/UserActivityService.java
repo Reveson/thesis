@@ -20,17 +20,17 @@ public class UserActivityService {
 	private final RedisTemplate<String, String> redisTemplate;
 	private final FeedFeignClient feedFeignClient;
 
-	public void setUserActive(long userId) {
+	public void setUserActive(long userId, String bearerToken) {
 		long now = System.currentTimeMillis();
 		Boolean added = redisTemplate.opsForZSet().add(ONLINE_USERS, String.valueOf(userId), now);
 		//TODO null check
-		if (added != null && !added)
-			orderFeedDenormalization(userId);
+		if (added != null && added)
+			orderFeedDenormalization(userId, bearerToken);
 	}
 
 	@Async
-	protected void orderFeedDenormalization(long userId) {
-		feedFeignClient.denormalizeFeeds(userId);
+	protected void orderFeedDenormalization(long userId, String bearerToken) {
+		feedFeignClient.denormalizeFeeds(userId, bearerToken);
 	}
 
 	@Scheduled(fixedRate = cleanupIntervalMillis, initialDelay = cleanupIntervalMillis)

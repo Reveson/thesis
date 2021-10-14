@@ -13,6 +13,7 @@ import siemieniuk.thesis.userservice.dto.LoginRequest;
 import siemieniuk.thesis.userservice.dto.LoginResponse;
 import siemieniuk.thesis.userservice.dto.RegisterRequest;
 import siemieniuk.thesis.userservice.service.AuthenticationService;
+import siemieniuk.thesis.userservice.service.UserActivityService;
 
 @RestController
 @RequestMapping("/")
@@ -20,11 +21,13 @@ import siemieniuk.thesis.userservice.service.AuthenticationService;
 public class AuthenticationController {
 
 	private final AuthenticationService authenticationService;
+	private final UserActivityService activityService;
 
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
-		return ResponseEntity.status(OK).
-				body(authenticationService.loginAndGetJwtToken(loginRequest));
+		var response = authenticationService.loginAndGetJwtToken(loginRequest);
+		activityService.setUserActive(response.getUser().getId(), "Bearer " + response.getAccessToken());
+		return ResponseEntity.status(OK).body(response);
 	}
 
 	@PostMapping("/register")

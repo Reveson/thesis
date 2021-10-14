@@ -24,9 +24,10 @@ public class SubscriptionService {
 
 	public List<Long> getActiveSubscribersList(long userId) {
 		String onlineFollowers = asRedisKey(ONLINE_USERS, userId);
+		String userFollowers = asRedisKey(USER_FOLLOWERS, userId);
 		//TODO can be done in one operation, but no interface in dependency...
-		redisTemplate.opsForZSet().intersectAndStore(ONLINE_USERS, USER_FOLLOWERS, onlineFollowers);
-		Set<String> onlineFollowersIds = redisTemplate.opsForZSet().rangeByScore(onlineFollowers, 0, -1);
+		redisTemplate.opsForZSet().intersectAndStore(ONLINE_USERS, userFollowers, onlineFollowers);
+		Set<String> onlineFollowersIds = redisTemplate.opsForZSet().range(onlineFollowers, 0, -1);
 
 		if (onlineFollowersIds == null) {
 			//TODO null log

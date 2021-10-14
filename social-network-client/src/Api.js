@@ -23,6 +23,10 @@ export function getUsersByIds(userIdsRequest) {
   return axios.post('user-service/user/many', userIdsRequest)
 }
 
+export function keepAlive(userId) {
+  return axios.post('user-service/user/' + userId + '/keepAlive');
+}
+
 //message service
 export function getChatUserIds(userId) {
   return axios.get('message-service/message/' + userId + '/chats')

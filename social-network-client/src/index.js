@@ -6,7 +6,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'axios';
 import axios from 'axios';
 import { MESSAGES, URLS } from './Constants';
-import { toastWarn } from './Common';
 
 axios.defaults.baseURL = URLS.backendUrl;
 axios.defaults.headers.common['Content-Type'] = 'application/json';

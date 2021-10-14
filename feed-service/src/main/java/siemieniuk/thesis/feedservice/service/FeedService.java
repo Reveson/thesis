@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,8 @@ public class FeedService {
 	protected void publishFeedForSubscribers(NewFeedRequest request,
 			UUID timestamp) {
 		Collection<Long> subscribersList = subscriptionService.getActiveSubscribersList(request.getAuthorId());
-		subscribersList.stream().map(id -> NewFeedRequestToFeedSubscriber.map(request, timestamp, id))
+		Stream.concat(subscribersList.stream(), Stream.of(request.getAuthorId()))
+				.map(id -> NewFeedRequestToFeedSubscriber.map(request, timestamp, id))
 				.forEach(feedSubscriberRepository::save);
 	}
 

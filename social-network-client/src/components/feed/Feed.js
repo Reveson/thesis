@@ -11,7 +11,7 @@ export default function Feed(props) {
   const loggedUserId = getCurrentUser().id;
 
   function addNewFeed(feed) {
-    setFeeds(feeds.concat(feed)); //TODO username
+    setFeeds(feeds.concat(feed));
   }
 
 
