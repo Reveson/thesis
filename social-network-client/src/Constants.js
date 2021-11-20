@@ -18,7 +18,7 @@ export const STORAGE = {
 
 export const REGISTER = {
   minUsernameLength: 4,
-  minPasswordLength: 6,
+  minPasswordLength: 8,
 };
 
 export const MESSAGES = {

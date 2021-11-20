@@ -23,6 +23,8 @@ export default function Register() {
       toastWarn('Username must have at least ' + REGISTER.minUsernameLength + ' characters.');
     else if (!passInput || passInput.length < REGISTER.minPasswordLength)
       toastWarn('Password must have at least ' + REGISTER.minPasswordLength + ' characters.');
+    else if (!isPasswordStrongEnough(passInput))
+      toastWarn('Chosen password is too weak.');
     else if (passInput !== passRepeatInput)
       toastWarn('Passwords don\'t match.');
     else {
@@ -38,6 +40,10 @@ export default function Register() {
       }).catch(() => toastErrorWithDelay(MESSAGES.loginError, 5000));
     }
 
+  }
+
+  function isPasswordStrongEnough(password) {
+    return (password.match(/[a-z]+/) && password.match(/[A-Z]+/) && password.match(/[0-9]+/)) != null;
   }
 
   return (
