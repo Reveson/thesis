@@ -47,17 +47,21 @@ export default function Post(props) {
     }
   }
 
-  useEffect(() => {
-    getCommentsCount(post.id)
-    .then(resp => setCommentsCount(resp.data))
-    .catch(() => toastError(MESSAGES.partialRequestError));
-  }, [comments])
+  function decodeTags(content) {
+    return content.replaceAll(/@\(id={([0-9]+)};login={([a-zA-Z0-9]+)}\)/g, ' <a href=\'/user/$1\'>@$2</a>')
+  }
 
   useEffect(() => {
     getReactions(post.id, getCurrentUser().id)
     .then(resp => setReactions(resp.data))
     .catch(() => toastError(MESSAGES.partialRequestError));
   }, [])
+
+  useEffect(() => {
+    getCommentsCount(post.id)
+    .then(resp => setCommentsCount(resp.data))
+    .catch(() => toastError(MESSAGES.partialRequestError));
+  }, [comments])
 
   return (
     <>
@@ -70,7 +74,7 @@ export default function Post(props) {
           </div>
 
           <div className="postCenter">
-            <div className="postText">{post.content}</div>
+            <div className="postText" dangerouslySetInnerHTML={{ __html: decodeTags(post.content) }} />
           </div>
           <div className="postBottom">
             <div className="postLikes" onClick={handleNewReaction}>

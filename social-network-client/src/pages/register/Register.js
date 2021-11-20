@@ -21,6 +21,8 @@ export default function Register() {
   function handleRegister() {
     if (!usernameInput || usernameInput.length < REGISTER.minUsernameLength)
       toastWarn('Username must have at least ' + REGISTER.minUsernameLength + ' characters.');
+    if (hasWhitespace(usernameInput))
+      toastWarn('Username cannot contain any whitespaces!');
     else if (!passInput || passInput.length < REGISTER.minPasswordLength)
       toastWarn('Password must have at least ' + REGISTER.minPasswordLength + ' characters.');
     else if (!isPasswordStrongEnough(passInput))
@@ -44,6 +46,10 @@ export default function Register() {
 
   function isPasswordStrongEnough(password) {
     return (password.match(/[a-z]+/) && password.match(/[A-Z]+/) && password.match(/[0-9]+/)) != null;
+  }
+
+  function hasWhitespace(username) {
+    return /\s/g.test(username);
   }
 
   return (

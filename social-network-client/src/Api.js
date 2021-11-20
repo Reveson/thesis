@@ -23,6 +23,10 @@ export function getUsersByIds(userIdsRequest) {
   return axios.post('user-service/user/many', userIdsRequest)
 }
 
+export function getUsersByLogins(userLoginsRequest) {
+  return axios.post('user-service/user/many/byLogin', userLoginsRequest)
+}
+
 export function keepAlive(userId) {
   return axios.post('user-service/user/' + userId + '/keepAlive');
 }

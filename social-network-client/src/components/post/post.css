@@ -40,3 +40,8 @@
 .postLikes, .postComments {
   cursor: pointer;
 }
+
+.postText a {
+  text-decoration: none;
+  color: #2073D9;
+}

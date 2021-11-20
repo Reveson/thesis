@@ -27,6 +27,10 @@ public class UserService {
 		return userRepository.findAllByIds(ids);
 	}
 
+	public List<User> findByLogins(List<String> logins) {
+		return userRepository.findAllByLogins(logins);
+	}
+
 	public void changePassword(String newPassword) {
 		//TODO to implement
 	}

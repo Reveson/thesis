@@ -2,7 +2,7 @@ import './share.css';
 import { AddPhotoAlternate, Send } from '@mui/icons-material';
 import { Button, TextareaAutosize } from '@mui/material';
 import { useState } from 'react';
-import { createNewFeed } from '../../Api';
+import { createNewFeed, getUsersByIds, getUsersByLogins } from '../../Api';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { toastError } from '../../Common';
@@ -24,21 +24,39 @@ export default function Share(props) {
       return;
     }
 
-    let content = postMessage;
-    setPostMessage('');
-    createNewFeed({ authorId: loggedUserId, content: content })
-    .then(resp => {
-      let newFeed = resp.data;
-      newFeed.user = getCurrentUser();
-      addNewFeed(newFeed);
-      toast.success('Feed has been published!', {
-        position: 'top-center',
-        hideProgressBar: true,
-        autoClose: 3000,
-        pauseOnHover: false,
-      });
-    }).catch(() => toastError(MESSAGES.requestError));
+    let enrichedPostWithTagsPromise = enrichPostWithTags(postMessage);
+    enrichedPostWithTagsPromise.then(content => {
+      setPostMessage('');
+      createNewFeed({ authorId: loggedUserId, content: content })
+      .then(resp => {
+        let newFeed = resp.data;
+        newFeed.user = getCurrentUser();
+        addNewFeed(newFeed);
+        toast.success('Feed has been published!', {
+          position: 'top-center',
+          hideProgressBar: true,
+          autoClose: 3000,
+          pauseOnHover: false,
+        });
+      }).catch(() => toastError(MESSAGES.requestError));
+    });
 
+  }
+
+  async function enrichPostWithTags(content) {
+    let foundTags = content.match(/ @([a-zA-Z0-9]+)/g);
+    if (!foundTags)
+      return content;
+    let taggedUsernames = foundTags.map(tag => tag.substr(2));
+    const usersResp = await getUsersByLogins({ userLogins: [...new Set(taggedUsernames)] })
+    .catch(() => {
+      toastError(MESSAGES.requestError);
+    });
+    let resContent = content;
+    usersResp.data.forEach(taggedUser => {
+      resContent = resContent.replaceAll(' @'+taggedUser.login, '@(id={' + taggedUser.id + '};login={' + taggedUser.login + '})');
+    });
+    return resContent;
   }
 
   return (

@@ -14,4 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query("select u from User u where u.id in (:ids)")
 	List<User> findAllByIds(List<Long> ids);
+
+	@Query("select u from User u where u.login in (:logins)")
+	List<User> findAllByLogins(List<String> logins);
 }

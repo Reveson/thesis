@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import siemieniuk.thesis.userservice.dto.ChangeInfoRequest;
 import siemieniuk.thesis.userservice.dto.UserIdList;
+import siemieniuk.thesis.userservice.dto.UserLoginList;
 import siemieniuk.thesis.userservice.dto.UserResponse;
 import siemieniuk.thesis.userservice.service.UserActivityService;
 import siemieniuk.thesis.userservice.service.UserService;
@@ -36,6 +37,13 @@ public class UserController {
 	@PostMapping("/many")
 	public ResponseEntity<List<UserResponse>> getUsers(@RequestBody UserIdList userIds) {
 		return ResponseEntity.ok(userService.findByIds(userIds.getUserIds()).stream()
+				.map(UserResponse::fromUser)
+				.collect(Collectors.toList()));
+	}
+
+	@PostMapping("/many/byLogin")
+	public ResponseEntity<List<UserResponse>> getUsersByLogin(@RequestBody UserLoginList userIds) {
+		return ResponseEntity.ok(userService.findByLogins(userIds.getUserLogins()).stream()
 				.map(UserResponse::fromUser)
 				.collect(Collectors.toList()));
 	}
