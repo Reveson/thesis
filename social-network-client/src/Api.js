@@ -117,3 +117,7 @@ export function getNumberOfUnreadMessages(userId) {
 export function getNotifications(userId) {
   return axios.get('notification-service/notifications/' + userId + '/list');
 }
+
+export function sendNotification(userId, content) {
+  return axios.post('notification-service/notifications/new', {userId: userId, content: content})
+}

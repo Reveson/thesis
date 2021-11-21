@@ -2,7 +2,7 @@ import './share.css';
 import { AddPhotoAlternate, Send } from '@mui/icons-material';
 import { Button, TextareaAutosize } from '@mui/material';
 import { useState } from 'react';
-import { createNewFeed, getUsersByIds, getUsersByLogins } from '../../Api';
+import { createNewFeed, getUsersByIds, getUsersByLogins, sendNotification } from '../../Api';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { toastError } from '../../Common';
@@ -56,6 +56,7 @@ export default function Share(props) {
     usersResp.data.forEach(taggedUser => {
       resContent = resContent.replaceAll(' @'+taggedUser.login, '@(id={' + taggedUser.id + '};login={' + taggedUser.login + '})');
     });
+    usersResp.data.forEach(taggedUser => sendNotification(taggedUser.id, 'User ' + getCurrentUser().login + ' has tagged you in his post.'))
     return resContent;
   }
 
