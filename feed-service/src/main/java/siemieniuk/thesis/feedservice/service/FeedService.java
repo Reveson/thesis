@@ -52,6 +52,11 @@ public class FeedService {
 		return feedAuthor;
 	}
 
+	public void deleteFeed(long authorId, UUID postId) {
+		feedAuthorRepository.deleteByAuthorIdAndTimestamp(authorId, postId);
+		//TODO delete from feed subscriber
+	}
+
 	@Async
 	protected void publishFeedForSubscribers(NewFeedRequest request,
 			UUID timestamp) {

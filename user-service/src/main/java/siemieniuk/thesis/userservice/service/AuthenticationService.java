@@ -1,5 +1,7 @@
 package siemieniuk.thesis.userservice.service;
 
+import java.util.Base64;
+
 import javax.transaction.Transactional;
 
 import org.springframework.core.env.Environment;
@@ -8,12 +10,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import lombok.RequiredArgsConstructor;
 import siemieniuk.thesis.userservice.dto.LoginRequest;
 import siemieniuk.thesis.userservice.dto.LoginResponse;
 import siemieniuk.thesis.userservice.dto.RegisterKeycloakRequest;
 import siemieniuk.thesis.userservice.dto.RegisterRequest;
 import siemieniuk.thesis.userservice.dto.RegistrationBearerToken;
+import siemieniuk.thesis.userservice.dto.SelfUserResponse;
 import siemieniuk.thesis.userservice.dto.UserResponse;
 import siemieniuk.thesis.userservice.exception.EntityAlreadyExistsException;
 import siemieniuk.thesis.userservice.model.User;
@@ -33,7 +39,8 @@ public class AuthenticationService {
 
 		var user = userRepository.getByLogin(request.getLogin()).orElseGet(() -> createNew(request.getLogin()));
 		LoginResponse response = LoginResponse.fromJson(keycloakLoginResponse.getBody());
-		response.setUser(UserResponse.fromUser(user));
+		boolean isAdmin = isAdmin(response.getAccessToken());
+		response.setUser(SelfUserResponse.fromUser(user, isAdmin));
 
 		return response;
 	}
@@ -83,5 +90,25 @@ public class AuthenticationService {
 		map.add("password", environment.getProperty("registration-api.password"));
 
 		return map;
+	}
+
+	private boolean isAdmin(String accessToken) {
+		try {
+			var chunks = accessToken.split("\\.");
+
+			Base64.Decoder decoder = Base64.getDecoder();
+
+			String payload = new String(decoder.decode(chunks[1]));
+			JsonObject element = JsonParser.parseString(payload).getAsJsonObject();
+			var iter = element.get("realm_access").getAsJsonObject().get("roles").getAsJsonArray().iterator();
+			while (iter.hasNext()) {
+				var role = iter.next().getAsString();
+				if ("portal_admin".equals(role))
+					return true;
+			}
+			return false;
+		} catch (Exception ignored) {
+			return false;
+		}
 	}
 }

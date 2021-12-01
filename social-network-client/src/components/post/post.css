@@ -27,6 +27,11 @@
   color: grey;
 }
 
+.deletePost {
+  margin-left:  auto;
+  margin-right: 0;
+}
+
 .postCenter {
   margin: 25px 0;
 }
@@ -37,7 +42,7 @@
   justify-content: space-between;
 }
 
-.postLikes, .postComments {
+.postLikes, .postComments, .deletePost {
   cursor: pointer;
 }
 

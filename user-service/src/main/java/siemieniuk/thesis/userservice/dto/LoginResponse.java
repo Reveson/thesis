@@ -14,7 +14,7 @@ public class LoginResponse {
 	private String tokenType;
 	private String sessionState;
 	private String scope;
-	private UserResponse user;
+	private SelfUserResponse user;
 
 	public static LoginResponse fromJson(String json) {
 		return new GsonBuilder()

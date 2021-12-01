@@ -6,9 +6,12 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import siemieniuk.thesis.userservice.model.User;
 
-@Data
+@Setter
+@Getter
 public class UserResponse {
 	private long id;
 	private String login;
@@ -29,7 +32,7 @@ public class UserResponse {
 		return response;
 	}
 
-	private static String parseDate(Date date) {
+	protected static String parseDate(Date date) {
 		if (date == null)
 			return null;
 

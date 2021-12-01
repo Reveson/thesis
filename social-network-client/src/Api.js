@@ -105,6 +105,10 @@ export function removeReaction(feedId, userId) {
   return axios.post('feed-service/feed/' + feedId + '/reaction/' + userId + '/remove');
 }
 
+export function deleteFeed(userId, feedId) {
+  return axios.delete('feed-service/feed/author/' + userId + '/feed/' + feedId);
+}
+
 //notification service
 export function getNumberOfNotifications(userId) {
   return axios.get('notification-service/notifications/' + userId + '/count');

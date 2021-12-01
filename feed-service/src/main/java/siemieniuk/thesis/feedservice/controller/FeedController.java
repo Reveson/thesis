@@ -3,10 +3,12 @@ package siemieniuk.thesis.feedservice.controller;
 import static siemieniuk.thesis.feedservice.dto.FeedResponse.asFeedResponse;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -98,6 +100,15 @@ public class FeedController {
 	public ResponseEntity<?> denormalizeFeeds(
 			@PathVariable("subscriberId") long subscriberId) {
 		feedService.denormalizeFeedsForUser(subscriberId, true);
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping("/author/{authorId}/feed/{postId}")
+	public ResponseEntity<?> deleteFeed(
+			@PathVariable("authorId") long authorId,
+			@PathVariable("postId") String postId) {
+		UUID postIdUuid = UUID.fromString(postId);
+		feedService.deleteFeed(authorId, postIdUuid);
 		return ResponseEntity.noContent().build();
 	}
 }

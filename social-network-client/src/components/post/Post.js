@@ -1,8 +1,8 @@
 import './post.css';
-import { Comment, Person, ThumbUp } from '@mui/icons-material';
-import { getUsername, toastError } from '../../Common';
+import { Comment, Delete, Person, ThumbUp } from '@mui/icons-material';
+import { getUsername, toastError, toastSuccess } from '../../Common';
 import CommentListDialog from '../commentListDialog/CommentListDialog';
-import { addReaction, getComments, getCommentsCount, getReactions, getUsersByIds, removeReaction } from '../../Api';
+import { addReaction, deleteFeed, getComments, getCommentsCount, getReactions, getUsersByIds, removeReaction } from '../../Api';
 import { useEffect, useState } from 'react';
 import { MESSAGES } from '../../Constants';
 
@@ -47,6 +47,13 @@ export default function Post(props) {
     }
   }
 
+  function handleDeletePost() {
+    if (window.confirm("Are you sure you want to delete this post?")) {
+      deleteFeed(getCurrentUser().id, post.id)
+      .then(() => toastSuccess("The post had been deleted.\nPlease reload the page.", 3000));
+    }
+  }
+
   function decodeTags(content) {
     return content.replaceAll(/@\(id={([0-9]+)};login={([a-zA-Z0-9]+)}\)/g, ' <a href=\'/user/$1\'>@$2</a>')
   }
@@ -71,6 +78,7 @@ export default function Post(props) {
             <Person/>
             <span className="postUsername">{getUsername(user)}</span>
             <span className="postDate">{new Date(post.timestamp).toLocaleString()}</span>
+            {getCurrentUser().admin && <div className="deletePost" onClick={handleDeletePost}><Delete/></div>}
           </div>
 
           <div className="postCenter">
