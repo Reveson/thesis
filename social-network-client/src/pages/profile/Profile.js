@@ -9,7 +9,7 @@ import {
   getNumberOfFollowers,
   getNumberOfUsersFollowed,
   getUserById,
-  isUserFollowed,
+  isUserFollowed, sendNotification,
   unfollowUser,
 } from '../../Api';
 import { useEffect, useState } from 'react';
@@ -78,6 +78,7 @@ export default function Profile(props) {
     .then(() => {
       setFollowingUsers(followingUsers + (isFollowed ? -1 : 1));
       setIsFollowed(!isFollowed);
+      sendNotification(id, 'User ' + getCurrentUser().login + ' has just ' + (isFollowed ? 'un' : '') + 'followed you.')
     })
     .catch(() => toastError(MESSAGES.requestError));
   }
