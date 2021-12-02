@@ -35,7 +35,7 @@ export default function Post(props) {
   }
 
   function handleNewReaction() {
-    if (reactions.alreadyReacted === undefined)
+    if (reactions.alreadyReacted === undefined || getCurrentUser().blocked)
       return;
 
     if (reactions.alreadyReacted) {

@@ -21,6 +21,7 @@ import siemieniuk.thesis.feedservice.model.FeedSubscriber;
 import siemieniuk.thesis.feedservice.model.UserCache;
 import siemieniuk.thesis.feedservice.repository.FeedAuthorRepository;
 import siemieniuk.thesis.feedservice.repository.FeedSubscriberRepository;
+import siemieniuk.thesis.feedservice.repository.UserRepository;
 
 @Service
 @AllArgsConstructor
@@ -29,7 +30,7 @@ public class FeedService {
 	private static final long FEED_SYNC_INTERVAL = TimeUnit.DAYS.toMillis(30);
 
 	private final SubscriptionService subscriptionService;
-	private final UserCacheService userCacheService;
+	private final UserService userService;
 
 	private final FeedSubscriberRepository feedSubscriberRepository;
 	private final FeedAuthorRepository feedAuthorRepository;
@@ -76,7 +77,7 @@ public class FeedService {
 
 	private void denormalizeFeedsForUserBackwards(long userId) {
 		long now = System.currentTimeMillis();
-		UserCache userCache = userCacheService.findById(userId)
+		UserCache userCache = userService.findById(userId)
 				.orElseGet(() -> UserCache.builder().id(userId).syncHead(now).syncTail(now).build());
 		long timeFrom = userCache.getSyncTail() - FEED_SYNC_INTERVAL;
 		long timeTo = userCache.getSyncTail();
@@ -86,12 +87,12 @@ public class FeedService {
 				.map(feedAuthor -> FeedAuthorToFeedSubscriber.map(feedAuthor, userId))
 				.forEach(feedSubscriberRepository::save);
 
-		userCacheService.save(userCache.toBuilder().syncTail(timeFrom).build());
+		userService.save(userCache.toBuilder().syncTail(timeFrom).build());
 	}
 
 	private void denormalizeFeedsForUserForwards(long userId) {
 		long now = System.currentTimeMillis();
-		UserCache userCache = userCacheService.findById(userId)
+		UserCache userCache = userService.findById(userId)
 				.orElseGet(() -> UserCache.builder().id(userId).syncHead(now - FEED_SYNC_INTERVAL).syncTail(now - FEED_SYNC_INTERVAL).build());
 
 		subscriptionService.getUsersFollowedBy(userId).stream()
@@ -99,6 +100,6 @@ public class FeedService {
 				.map(feedAuthor -> FeedAuthorToFeedSubscriber.map(feedAuthor, userId))
 				.forEach(feedSubscriberRepository::save);
 
-		userCacheService.save(userCache.toBuilder().syncHead(now).build());
+		userService.save(userCache.toBuilder().syncHead(now).build());
 	}
 }

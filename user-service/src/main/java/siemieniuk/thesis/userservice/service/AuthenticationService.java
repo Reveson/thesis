@@ -66,7 +66,6 @@ public class AuthenticationService {
 		user.setLogin(login);
 		user.setName(name);
 		user.setSurname(surname);
-		user.setPrivileges(2); //TODO hardcode
 
 		return userRepository.save(user);
 	}

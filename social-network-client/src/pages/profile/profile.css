@@ -49,3 +49,9 @@
 .profileButtonChat {
   transform: scale(0.8);
 }
+
+.blockUser {
+  margin-left:  auto;
+  margin-right: 0;
+  cursor: pointer;
+}

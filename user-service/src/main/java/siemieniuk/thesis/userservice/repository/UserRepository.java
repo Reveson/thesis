@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import siemieniuk.thesis.userservice.model.User;
@@ -17,4 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query("select u from User u where u.login in (:logins)")
 	List<User> findAllByLogins(List<String> logins);
+
+	@Modifying
+	@Query(value = "update user set is_blocked = !is_blocked where id = :id", nativeQuery = true)
+	void blockById(long id);
 }

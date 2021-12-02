@@ -42,12 +42,11 @@ public class UserService {
 		user.setSurname(request.getSurname());
 		user.setCity(request.getCity());
 		user.setBirthDate(request.getBirthDate());
-		user.setPrivate(request.isPrivate());
 
 		return userRepository.save(user);
 	}
 
-	public void changePrivileges(int privileges) {
-		//TODO to implement
+	public void block(long userId) {
+		userRepository.blockById(userId);
 	}
 }

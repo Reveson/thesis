@@ -62,4 +62,11 @@ public class UserController {
 
 		return ResponseEntity.noContent().build();
 	}
+
+	@PostMapping("/block/{userId}")
+	public ResponseEntity<?> blockUser(@PathVariable("userId") long userId) {
+		userService.block(userId);
+
+		return ResponseEntity.ok().build();
+	}
 }

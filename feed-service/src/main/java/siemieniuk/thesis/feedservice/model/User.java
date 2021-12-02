@@ -1,4 +1,4 @@
-package siemieniuk.thesis.userservice.model;
+package siemieniuk.thesis.feedservice.model;
 
 import java.util.Date;
 
@@ -16,11 +16,5 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	private String login;
-	private String name;
-	private String surname;
-	private String city;
-	private Date birthDate;
 	private boolean isBlocked;
-
 }

@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import lombok.AllArgsConstructor;
 import siemieniuk.thesis.feedservice.dto.FeedResponse;
@@ -23,6 +25,7 @@ import siemieniuk.thesis.feedservice.dto.FollowRequest;
 import siemieniuk.thesis.feedservice.dto.NewFeedRequest;
 import siemieniuk.thesis.feedservice.service.FeedService;
 import siemieniuk.thesis.feedservice.service.SubscriptionService;
+import siemieniuk.thesis.feedservice.service.UserService;
 
 @RestController
 @RequestMapping("/feed")
@@ -31,6 +34,7 @@ public class FeedController {
 
 	private final FeedService feedService;
 	private final SubscriptionService subscriptionService;
+	private final UserService userService;
 
 	//TODO pagination
 	@GetMapping("/subscriber/{subscriberId}")
@@ -53,6 +57,9 @@ public class FeedController {
 
 	@PostMapping("/new")
 	public ResponseEntity<FeedResponse> publishFeed(@RequestBody NewFeedRequest request) {
+		if (!userService.canPublish(request.getAuthorId()))
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is blocked.");
+
 		return ResponseEntity.ok(asFeedResponse(feedService.publishFeed(request)));
 	}
 

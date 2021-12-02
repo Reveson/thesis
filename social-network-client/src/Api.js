@@ -31,6 +31,10 @@ export function keepAlive(userId) {
   return axios.post('user-service/user/' + userId + '/keepAlive');
 }
 
+export function blockUser(userId) {
+  return axios.post('user-service/user/block/' + userId);
+}
+
 //message service
 export function getChatUserIds(userId) {
   return axios.get('message-service/message/' + userId + '/chats')

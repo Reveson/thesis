@@ -83,6 +83,7 @@ export default function Share(props) {
           <Button variant="contained"
                   endIcon={<Send/>}
                   onClick={send}
+                  disabled={getCurrentUser().blocked}
                   sx={{ color: '#798a96', backgroundColor: '#1f2b36' }}
                   className="Button">
             Share

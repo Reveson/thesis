@@ -1,9 +1,10 @@
 import './profile.css';
 import Topbar from '../../components/topbar/Topbar';
-import { Add, Chat, Edit, Person, Remove } from '@mui/icons-material';
+import { Add, Block, Chat, Edit, Person, Remove } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import Post from '../../components/post/Post';
 import {
+  blockUser,
   followUser,
   getFeedsByAuthor,
   getNumberOfFollowers,
@@ -15,7 +16,7 @@ import {
 import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import EditProfileDialog from '../../components/editProfileDialog/EditProfileDialog';
-import { getUsername, toastError } from '../../Common';
+import { getUsername, toastError, toastSuccess } from '../../Common';
 import BottomBar from '../../components/bottombar/BottomBar';
 import { MESSAGES } from '../../Constants';
 
@@ -83,6 +84,11 @@ export default function Profile(props) {
     .catch(() => toastError(MESSAGES.requestError));
   }
 
+  function handleBlockUser() {
+    blockUser(id)
+    .then(() => toastSuccess("Selected user has been blocked.", 3000));
+  }
+
   return (
     <>
       <Topbar getCurrentUser={getCurrentUser}/>
@@ -110,6 +116,7 @@ export default function Profile(props) {
               <span className="profileInfoKey">birthday:</span>
               <span className="profileInfoValue">{userProp('birthDate')}</span>
             </div>
+            {getCurrentUser().admin && <div className="blockUser" onClick={handleBlockUser}><Block/> <span>Block user</span></div>}
           </div>
         </div>
         <div className="profileBottom">

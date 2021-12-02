@@ -60,6 +60,7 @@ export default function CommentListDialog(props) {
                         size="small"
                         style={{ transform: 'scale(0.8)', backgroundColor: 'lightgray', color: 'black' }}
                         onClick={send}
+                        disabled={getCurrentUser().blocked}
                         className="Button">
                   Add a comment
                 </Button>

@@ -14,5 +14,4 @@ public class ChangeInfoRequest {
 	private String city;
 	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date birthDate;
-	private boolean isPrivate;
 }

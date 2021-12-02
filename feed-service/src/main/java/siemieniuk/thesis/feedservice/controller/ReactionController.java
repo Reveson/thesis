@@ -2,16 +2,19 @@ package siemieniuk.thesis.feedservice.controller;
 
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import lombok.AllArgsConstructor;
 import siemieniuk.thesis.feedservice.dto.ReactionResponse;
 import siemieniuk.thesis.feedservice.service.ReactionService;
+import siemieniuk.thesis.feedservice.service.UserService;
 
 @RestController
 @RequestMapping("/feed/{feedId}/reaction")
@@ -19,6 +22,7 @@ import siemieniuk.thesis.feedservice.service.ReactionService;
 public class ReactionController {
 
 	private final ReactionService reactionService;
+	private final UserService userService;
 
 	@GetMapping("/{userId}")
 	public ResponseEntity<ReactionResponse> getReactions(
@@ -34,6 +38,8 @@ public class ReactionController {
 	public ResponseEntity<ReactionResponse> addReaction(
 			@PathVariable("feedId") String feedId,
 			@PathVariable("userId") long userId) {
+		if (!userService.canPublish(userId))
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is blocked.");
 		UUID postId = getUUID(feedId);
 		reactionService.addReaction(postId, userId);
 		return ResponseEntity.noContent().build();
@@ -43,6 +49,8 @@ public class ReactionController {
 	public ResponseEntity<ReactionResponse> removeReaction(
 			@PathVariable("feedId") String feedId,
 			@PathVariable("userId") long userId) {
+		if (!userService.canPublish(userId))
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is blocked.");
 		UUID postId = getUUID(feedId);
 		reactionService.removeReaction(postId, userId);
 		return ResponseEntity.noContent().build();

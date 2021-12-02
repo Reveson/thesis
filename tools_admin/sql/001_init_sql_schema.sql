@@ -1,4 +1,4 @@
-create database thesis;
+CREATE DATABASE thesis;
 use thesis;
 
 CREATE TABLE user
@@ -9,7 +9,6 @@ CREATE TABLE user
     surname    varchar(255),
     city       varchar(255),
     birth_date date,
-    privileges tinyint      NOT NULL,
-    is_private boolean,
+    is_blocked boolean      NOT NULL DEFAULT FALSE,
     UNIQUE (login)
 );
