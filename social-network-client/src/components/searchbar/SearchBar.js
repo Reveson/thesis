@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import { Autocomplete, InputBase } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import { Search } from '@mui/icons-material';
+import { findWithSearchbar } from '../../Api';
+import { getUsername, toastError } from '../../Common';
+import { MESSAGES } from '../../Constants';
 
 export default function SearchBar() {
   let history = useHistory();
@@ -23,15 +26,17 @@ export default function SearchBar() {
   }, [searchText]);
 
   function searchUsers(searchText) {
-    //TODO from API
-    setUsers([
-      {id: 1, name: 'John ' + searchText + 1},
-      {id: 2, name: 'Max ' + searchText + 2},
-      {id: 3, name: 'Robbert ' + searchText + 3}
-    ])
+    findWithSearchbar(searchText)
+    .then(resp => {
+      setUsers(resp.data)
+    }).catch(() => {
+      toastError(MESSAGES.partialRequestError);
+      setUsers([]);
+    });
   }
 
   function clearUsersList() {
+    setSearchTextDebounce('');
     setUsers([]);
   }
 
@@ -40,8 +45,9 @@ export default function SearchBar() {
       <Autocomplete
         id="user-search-bar"
         options={users}
-        getOptionLabel={user => user?.name ? user.name : ''}
+        getOptionLabel={user => getUsername(user)}
         onInput={e => setSearchTextDebounce(e.target.value)}
+        filterOptions={x => x}
         clearOnBlur={true}
         onClose={clearUsersList}
         onChange={(e, user) => {

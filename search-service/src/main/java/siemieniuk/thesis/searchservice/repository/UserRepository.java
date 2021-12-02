@@ -7,6 +7,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 
 public interface UserRepository extends ElasticsearchRepository<User, String> {
 
-  @Query("{\"multi_match\" : {\"query\": \"?0\", \"fields\": [ \"name\", \"surname\", \"login\" ] }}")
+  @Query("{ \"multi_match\": { \"query\": \"?0\", \"fields\": [ \"name\", \"surname\", \"login\" ], "
+          + "\"fuzziness\" : \"AUTO\", \"prefix_length\" : 1 } }")
   List<User> findAllByQuery(String name);
 }

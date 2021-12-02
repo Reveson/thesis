@@ -129,3 +129,7 @@ export function getNotifications(userId) {
 export function sendNotification(userId, content) {
   return axios.post('notification-service/notifications/new', {userId: userId, content: content})
 }
+//search service
+export function findWithSearchbar(content) {
+  return axios.get('search-service/user/find?query=' + content)
+}
