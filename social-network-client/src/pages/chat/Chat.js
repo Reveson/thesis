@@ -89,7 +89,7 @@ export default function Chat(props) {
             <div className="chatBoxTop">
               <div className="chatBoxTopWrapper">
                 {messages.sort((a, b) => (b.timestamp - a.timestamp) || 0)
-                .reverse().map(message => (<Message key={message.timestamp} message={message}/>))}
+                .reverse().map(message => (<Message key={message.timestamp} message={message} getCurrentUser={getCurrentUser}/>))}
               </div>
             </div>
             <div className="chatBoxBottom">

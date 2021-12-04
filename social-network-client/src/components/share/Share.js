@@ -76,6 +76,7 @@ export default function Share(props) {
           <Button variant="contained"
                   startIcon={<AddPhotoAlternate/>}
                   disabled={true}
+                  hidden={true}
                   sx={{ color: '#798a96', backgroundColor: '#1f2b36' }}
                   className="Button">
             Add a photo

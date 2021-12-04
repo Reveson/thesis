@@ -92,6 +92,7 @@ public class FeedController {
 	public ResponseEntity<?> follow(
 			@RequestBody FollowRequest request) {
 		subscriptionService.followUser(request);
+		feedService.denormalizeFeedsForUser(request.getUserId(), true);
 		return ResponseEntity.noContent().build();
 	}
 

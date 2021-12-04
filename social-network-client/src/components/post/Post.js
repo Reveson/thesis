@@ -49,7 +49,7 @@ export default function Post(props) {
 
   function handleDeletePost() {
     if (window.confirm("Are you sure you want to delete this post?")) {
-      deleteFeed(getCurrentUser().id, post.id)
+      deleteFeed(user.id, post.id)
       .then(() => toastSuccess("The post had been deleted.\nPlease reload the page.", 3000));
     }
   }

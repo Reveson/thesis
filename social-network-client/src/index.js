@@ -24,6 +24,8 @@ axios.interceptors.response.use(undefined, error => {
     else
       throw new Error(MESSAGES.http401)
   }
+  if (status === 409)
+    throw new Error(MESSAGES.http409)
 });
 
 ReactDOM.render(

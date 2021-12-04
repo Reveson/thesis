@@ -27,4 +27,5 @@ export const MESSAGES = {
   messagesRequestError: "We are experiencing some network problems, chats could not be loaded.",
   loginError: "Could not complete your request. Probably our auth service is down. Please contact the administrator.",
   http401: "401",
+  http409: "409",
 }

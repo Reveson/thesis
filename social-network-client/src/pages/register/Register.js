@@ -39,7 +39,12 @@ export default function Register() {
         let redirectTime = 5000;
         toastSuccess("Account has been created. You will be redirected to login page in " + redirectTime/1000 + " seconds.", redirectTime);
         setTimeout(() => history.push('/login'), redirectTime);
-      }).catch(() => toastErrorWithDelay(MESSAGES.loginError, 5000));
+      }).catch(resp => {
+        if (resp?.message === MESSAGES.http409)
+          toastWarn('User with same username already exists.')
+        else
+          toastErrorWithDelay(MESSAGES.loginError, 5000)
+      });
     }
 
   }
@@ -66,7 +71,7 @@ export default function Register() {
                  value={lastNameInput} onInput={e => setLastName(e.target.value)}/>
           <input type="password" className="input" placeholder="password"
                  value={passInput} onInput={e => setPassInput(e.target.value)}/>
-          <input type="password" className="input" placeholder="password"
+          <input type="password" className="input" placeholder="repeat password"
                  value={passRepeatInput} onInput={e => setPassRepeatInput(e.target.value)}/>
           <Button variant="contained"
                   onClick={handleRegister}
